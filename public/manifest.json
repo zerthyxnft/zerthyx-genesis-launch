@@ -1,41 +1,27 @@
 {
-  "name": "Zerthyx - Premium NFT Staking & Crypto Mining Platform",
+  "name": "Zerthyx - NFT Staking & Mining Platform",
   "short_name": "Zerthyx",
-  "description": "Join Zerthyx for secure NFT staking, cryptocurrency mining, and digital wallet services. Earn passive income from crypto assets with guaranteed daily returns.",
+  "description": "Premium cryptocurrency platform for NFT staking, mining rewards, and digital wallet services",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#00ffff",
+  "background_color": "#0f0f23",
+  "theme_color": "#6366f1",
   "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["finance", "business", "productivity"],
+  "categories": ["finance", "business"],
   "lang": "en",
-  "id": "zerthyx-crypto-platform",
-  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "maskable any"
     },
     {
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "maskable any"
     },
     {
       "src": "/apple-touch-icon.png",
@@ -48,8 +34,7 @@
       "src": "/lovable-uploads/f217c0ea-c71e-41f0-8c43-5386375820b6.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "Zerthyx Dashboard - Main interface for crypto mining and NFT staking"
+      "form_factor": "wide"
     }
   ],
   "features": [
@@ -57,31 +42,7 @@
     "fast",
     "simple"
   ],
-  "related_applications": [],
-  "shortcuts": [
-    {
-      "name": "Mining Dashboard",
-      "short_name": "Mine",
-      "description": "Access your crypto mining dashboard",
-      "url": "/#mine",
-      "icons": [
-        {
-          "src": "/android-chrome-192x192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Wallet",
-      "short_name": "Wallet",
-      "description": "Check your crypto wallet balance",
-      "url": "/#wallet",
-      "icons": [
-        {
-          "src": "/android-chrome-192x192.png",
-          "sizes": "192x192"
-        }
-      ]
-    }
-  ]
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
 }
