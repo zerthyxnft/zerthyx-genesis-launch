@@ -1,34 +1,48 @@
-const CACHE_NAME = 'zerthyx-v1.0.0';
+const CACHE_NAME = 'zerthyx-v1.0.1';
 const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
+  '/', // Homepage
   '/android-chrome-192x192.png',
   '/android-chrome-512x512.png',
-  '/apple-touch-icon.png'
+  '/apple-touch-icon.png',
+  '/favicon.ico',
+  '/manifest.json',
+  '/robots.txt',
+  '/site.webmanifest',
+  '/sitemap.xml',
+  '/placeholder.svg'
 ];
 
 // Install event
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(urlsToCache).catch((err) => {
+        console.warn('Some files failed to cache:', err);
+      });
+    })
   );
   self.skipWaiting();
 });
 
-// Fetch event
+// Fetch event (Network first, fallback to cache)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
+        // Cache fetched file for future
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      })
+      .catch(() => {
+        // If offline, try cache
+        return caches.match(event.request);
       })
   );
 });
 
-// Activate event
+// Activate event (Delete old caches)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -77,7 +91,6 @@ self.addEventListener('push', (event) => {
 // Notification click event
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-
   if (event.action === 'explore') {
     event.waitUntil(
       clients.openWindow('/')
