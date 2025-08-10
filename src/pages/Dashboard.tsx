@@ -34,9 +34,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-muted/20 to-background overflow-x-hidden">
       {/* Main Content */}
-      <div className="pb-20 bg-white rounded-lg m-4 shadow-lg border">
+      <div className="flex-1 w-full pb-20">
         {renderContent()}
       </div>
 
@@ -53,7 +53,7 @@ const Dashboard = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "flex flex-col items-center py-2 px-4 rounded-lg transition-all duration-300",
+                    "flex flex-col items-center py-2 px-4 transition-all duration-300",
                     isActive 
                       ? "text-primary cyber-glow" 
                       : "text-muted-foreground hover:text-foreground"
