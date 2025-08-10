@@ -102,7 +102,7 @@ const DashboardHome = () => {
   }, [walletData]);
 
   // Function to update earnings in database
-  const updateEarningsInDatabase = async (currentEarnings) => {
+  const updateEarningsInDatabase = async (currentEarnings: number) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -128,7 +128,7 @@ const DashboardHome = () => {
     if (walletData.nft_maturity_date) {
       const interval = setInterval(() => {
         const now = new Date();
-        const maturityDate = new Date(walletData.nft_maturity_date);
+        const maturityDate = new Date(walletData.nft_maturity_date!);
         const diff = maturityDate.getTime() - now.getTime();
 
         if (diff > 0) {
@@ -193,7 +193,7 @@ const DashboardHome = () => {
       if (error) throw error;
 
       const addresses: DepositAddresses = {};
-      data?.forEach(setting => {
+      data?.forEach((setting: any) => {
         if (setting.setting_key === 'deposit_address_trc20') {
           addresses.TRC20 = setting.setting_value;
         } else if (setting.setting_key === 'deposit_address_bep20') {
@@ -224,13 +224,13 @@ const DashboardHome = () => {
     }
   };
 
-  const handlePresetAmount = (amount) => {
+  const handlePresetAmount = (amount: number) => {
     setDepositAmount(amount.toString());
     setShowPaymentDetails(true);
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
     if (file) {
       setUploadedFile(file);
     }
@@ -268,12 +268,7 @@ const DashboardHome = () => {
         return;
       }
 
-      // Get screenshot URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('transaction-screenshots')
-        .getPublicUrl(fileName);
-
-      // Insert deposit with screenshot URL
+      // Insert deposit with screenshot filename
       const { error } = await supabase
         .from('deposits')
         .insert({
@@ -295,10 +290,10 @@ const DashboardHome = () => {
       setShowPaymentDetails(false);
       setDepositAmount('');
       setUploadedFile(null);
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
+        description: error?.message ?? 'Something went wrong',
         variant: "destructive"
       });
     }
@@ -364,16 +359,17 @@ const DashboardHome = () => {
       setWithdrawAmount('');
       setWithdrawAddress('');
       loadUserWithdrawals(); // refresh withdrawals list
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
+        description: error?.message ?? 'Something went wrong',
         variant: "destructive"
       });
     }
   };
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text?: string) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
     toast({
       title: "Copied!",
@@ -386,7 +382,7 @@ const DashboardHome = () => {
     Math.max(0, Math.min(100, ((45 - countdown.days) / 45) * 100)) : 0;
 
   return (
-    <div className="p-4 max-w-md mx-auto space-y-6 bg-white min-h-screen">
+    <div className="w-full min-h-screen bg-white p-4 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -402,159 +398,161 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* Main Wallet Card */}
-      <Card className="bg-gradient-to-br from-accent/20 to-accent/10 border-accent/30 p-6 relative overflow-hidden shadow-xl">
-        <div className="absolute top-4 right-4 flex gap-2">
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="h-8 w-8 bg-green-500/20 hover:bg-green-500/30"
-            onClick={() => setShowDepositModal(true)}
-          >
-            <ArrowDown className="w-4 h-4 text-green-400" />
-          </Button>
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="h-8 w-8 bg-orange-500/20 hover:bg-orange-500/30"
-            onClick={() => setShowWithdrawModal(true)}
-          >
-            <ArrowUp className="w-4 h-4 text-orange-400" />
-          </Button>
+      {/* ---------- Wallet (ORANGE) ---------- */}
+      <div className="w-full rounded-xl shadow-xl overflow-hidden p-6" style={{ backgroundColor: "#FFA500" }}>
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg bg-white/10">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Main Wallet</p>
+              <p className="text-xs text-white/90">Total Deposit + Daily Profit</p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-8 w-8 bg-white/20 hover:bg-white/30"
+              onClick={() => setShowDepositModal(true)}
+            >
+              <ArrowDown className="w-4 h-4 text-white" />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-8 w-8 bg-white/20 hover:bg-white/30"
+              onClick={() => setShowWithdrawModal(true)}
+            >
+              <ArrowUp className="w-4 h-4 text-white" />
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 mb-4">
-          <div className="bg-accent/20 p-3 rounded-lg border border-accent/40 shadow-lg">
-            <Wallet className="w-6 h-6 text-accent" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-accent">Main Wallet</p>
-            <p className="text-xs text-muted-foreground">Total Deposit + Daily Profit</p>
-          </div>
-        </div>
-
-        <div className="text-center mb-4">
-          <h2 className="text-3xl font-bold text-highlight mb-1">
-            ${totalBalance.toFixed(2)} USDT
-          </h2>
-          <div className="flex items-center justify-center text-green-400 text-sm">
+        <div className="text-center mt-4">
+          <h2 className="text-3xl font-bold text-white mb-1">${totalBalance.toFixed(2)} USDT</h2>
+          <div className="flex items-center justify-center text-white/90 text-sm">
             <TrendingUp className="w-4 h-4 mr-1" />
             +2.2% Daily Growth
           </div>
         </div>
 
-        {/* Real-time NFT Daily Earnings */}
-        <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4">
-          <div className="flex items-center justify-between">
+        {/* Real-time NFT Daily Earnings (small pill inside wallet) */}
+        <div className="mt-4 inline-block bg-white/10 rounded-lg p-3">
+          <div className="flex items-center justify-between min-w-[220px]">
             <div>
-              <p className="text-sm font-medium">NFT Daily Earnings</p>
-              <p className="text-xs text-muted-foreground">2.2% Live Growth</p>
+              <p className="text-sm font-medium text-white">NFT Daily Earnings</p>
+              <p className="text-xs text-white/90">2.2% Live Growth</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-green-400">
-                +${realTimeEarnings.toFixed(6)} USDT
-              </p>
-              <p className="text-xs text-muted-foreground animate-pulse">
-                Growing every second...
-              </p>
+              <p className="text-lg font-bold text-white">+${realTimeEarnings.toFixed(6)} USDT</p>
+              <p className="text-xs text-white/90 animate-pulse">Growing every second...</p>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* NFT Card Image Below Wallet */}
-        <div className="flex justify-center mt-4 mb-1">
-          <img 
-            src="/lovable-uploads/nft-card.png"
-            alt="NFT Card"
-            className="w-48 h-auto rounded-xl border-4 border-primary/20 shadow-lg"
-          />
+      {/* ---------- NFT IMAGE & TEXT (NO BOX, WHITE BACKGROUND) ---------- */}
+      <div className="w-full bg-white flex flex-col items-center space-y-3">
+        <img 
+          src="/lovable-uploads/nft-card.png"
+          alt="NFT Card"
+          className="w-48 h-auto object-contain"
+        />
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-gray-900">🚀 Zerthyx Power NFT</h3>
+          <p className="text-sm text-gray-700 mt-1">
+            2.2% Daily Return — 45-Day Cycle. Auto rewards delivered every 24 hours.
+          </p>
         </div>
+      </div>
 
-        {/* NFT Features Below Image */}
-        <div className="bg-muted/20 rounded-lg mt-2 mb-2 p-4 text-xs">
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <p><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
-              <p>💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
-              <p>⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
-              <p>🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
-              <p>🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
-              <p>⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
-              <p>🔥 <strong>Limited Supply</strong> – Don’t miss your chance to hold this high-yield NFT.</p>
-            `
-          }}/>
-        </div>
-      </Card>
+      {/* ---------- NFT FEATURES (light gray box) ---------- */}
+      <div className="w-full bg-gray-100 rounded-xl p-4 text-xs">
+        <div dangerouslySetInnerHTML={{
+          __html: `
+            <p><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
+            <p>💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
+            <p>⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
+            <p>🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
+            <p>🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
+            <p>⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
+            <p>🔥 <strong>Limited Supply</strong> – Don’t miss your chance to hold this high-yield NFT.</p>
+          `
+        }}/>
+      </div>
 
-      {/* 45 Day Countdown Timer */}
+      {/* ---------- 45 Day Countdown Timer (light) ---------- */}
       {walletData.nft_maturity_date && (
-        <Card className="glass-card p-6">
+        <div className="w-full bg-gray-100 rounded-xl p-4">
           <div className="flex items-center gap-3 mb-4">
-            <div className="cyber-glow p-2 rounded-lg bg-orange-500/10">
+            <div className="p-2 rounded-lg bg-orange-50">
               <Clock className="w-5 h-5 text-orange-400" />
             </div>
             <div>
-              <h3 className="font-bold">NFT Maturity Countdown</h3>
-              <p className="text-xs text-muted-foreground">45 Days Investment Period</p>
+              <h3 className="font-bold text-gray-900">NFT Maturity Countdown</h3>
+              <p className="text-xs text-gray-600">45 Days Investment Period</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <Progress value={progressPercentage} className="h-2" />
             <div className="grid grid-cols-4 gap-2 text-center">
-              <div className="bg-primary/10 rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary">{countdown.days}</p>
-                <p className="text-xs text-muted-foreground">Days</p>
+              <div className="bg-white/60 rounded-lg p-3">
+                <p className="text-2xl font-bold text-gray-900">{countdown.days}</p>
+                <p className="text-xs text-gray-600">Days</p>
               </div>
-              <div className="bg-primary/10 rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary">{countdown.hours}</p>
-                <p className="text-xs text-muted-foreground">Hours</p>
+              <div className="bg-white/60 rounded-lg p-3">
+                <p className="text-2xl font-bold text-gray-900">{countdown.hours}</p>
+                <p className="text-xs text-gray-600">Hours</p>
               </div>
-              <div className="bg-primary/10 rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary">{countdown.minutes}</p>
-                <p className="text-xs text-muted-foreground">Min</p>
+              <div className="bg-white/60 rounded-lg p-3">
+                <p className="text-2xl font-bold text-gray-900">{countdown.minutes}</p>
+                <p className="text-xs text-gray-600">Min</p>
               </div>
-              <div className="bg-primary/10 rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary">{countdown.seconds}</p>
-                <p className="text-xs text-muted-foreground">Sec</p>
+              <div className="bg-white/60 rounded-lg p-3">
+                <p className="text-2xl font-bold text-gray-900">{countdown.seconds}</p>
+                <p className="text-xs text-gray-600">Sec</p>
               </div>
             </div>
           </div>
-        </Card>
+        </div>
       )}
 
-      {/* Profit Withdrawal Button */}
+      {/* ---------- Profit Withdrawal Button (light) ---------- */}
       {(walletData.total_profit + realTimeEarnings) >= 5 && (
-        <Card className="glass-card p-4">
+        <div className="w-full bg-gray-100 rounded-xl p-4">
           <Button 
-            className="w-full btn-cyber cyber-glow animate-pulse"
+            className="w-full bg-[#FFA500] text-white font-semibold"
             onClick={() => setShowWithdrawModal(true)}
           >
             <DollarSign className="w-5 h-5 mr-2" />
             Withdraw Profit (${(walletData.total_profit + realTimeEarnings).toFixed(2)} USDT)
           </Button>
-        </Card>
+        </div>
       )}
 
-      {/* Deposit Modal */}
+      {/* ---------- Deposit Modal ---------- */}
       <Dialog open={showDepositModal} onOpenChange={setShowDepositModal}>
-        <DialogContent className="glass-card">
+        <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
             <DialogTitle>Deposit USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Amount (USDT)</label>
+              <label className="text-sm font-medium text-gray-800">Amount (USDT)</label>
               <Input 
                 type="number" 
                 placeholder="Enter amount"
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
-                className="glass-card"
+                className="mt-2"
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-2 block">Quick Select</label>
+              <label className="text-sm font-medium mb-2 block text-gray-800">Quick Select</label>
               <div className="grid grid-cols-4 gap-2">
                 {presetAmounts.map(amount => (
                   <Button
@@ -562,7 +560,7 @@ const DashboardHome = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handlePresetAmount(amount)}
-                    className="glass-card"
+                    className="bg-white"
                   >
                     ${amount}
                   </Button>
@@ -572,9 +570,9 @@ const DashboardHome = () => {
             {showPaymentDetails && (
               <div className="space-y-4 border-t pt-4">
                 <div>
-                  <label className="text-sm font-medium">Blockchain</label>
+                  <label className="text-sm font-medium text-gray-800">Blockchain</label>
                   <Select value={selectedBlockchain} onValueChange={setSelectedBlockchain}>
-                    <SelectTrigger className="glass-card">
+                    <SelectTrigger className="mt-2">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -583,9 +581,9 @@ const DashboardHome = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="bg-muted/20 rounded-lg p-4">
+                <div className="bg-gray-100 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-medium">Deposit Address:</p>
+                    <p className="text-sm font-medium text-gray-800">Deposit Address:</p>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -594,27 +592,25 @@ const DashboardHome = () => {
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
-                  <p className="text-xs break-all font-mono bg-background/50 p-2 rounded">
+                  <p className="text-xs break-all font-mono bg-white p-2 rounded text-gray-700">
                     {depositAddresses[selectedBlockchain]}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Upload Payment Screenshot</label>
+                  <label className="text-sm font-medium text-gray-800">Upload Payment Screenshot</label>
                   <div 
-                    className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center cursor-pointer hover:bg-muted/10 transition-colors"
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors"
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {uploadedFile ? (
-                      <div className="flex items-center justify-center gap-2 text-green-400">
+                      <div className="flex items-center justify-center gap-2 text-green-600">
                         <CheckCircle className="w-5 h-5" />
-                        <span>{uploadedFile.name}</span>
+                        <span className="text-sm">{uploadedFile.name}</span>
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <Upload className="w-8 h-8 mx-auto text-muted-foreground" />
-                        <p className="text-sm text-muted-foreground">
-                          Click to upload screenshot
-                        </p>
+                        <Upload className="w-8 h-8 mx-auto text-gray-500" />
+                        <p className="text-sm text-gray-600">Click to upload screenshot</p>
                       </div>
                     )}
                   </div>
@@ -627,7 +623,7 @@ const DashboardHome = () => {
                   />
                 </div>
                 <Button 
-                  className="w-full btn-cyber"
+                  className="w-full bg-[#FFA500] text-white"
                   onClick={handleDepositSubmit}
                   disabled={!depositAmount || !uploadedFile}
                 >
@@ -639,18 +635,18 @@ const DashboardHome = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Withdraw Modal */}
+      {/* ---------- Withdraw Modal (light) ---------- */}
       <Dialog open={showWithdrawModal} onOpenChange={setShowWithdrawModal}>
-        <DialogContent className="glass-card">
+        <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
             <DialogTitle>WITHDRAW USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {/* Blockchain Select */}
             <div>
-              <label className="text-sm font-medium">Blockchain</label>
+              <label className="text-sm font-medium text-gray-800">Blockchain</label>
               <Select value={selectedBlockchain} onValueChange={setSelectedBlockchain}>
-                <SelectTrigger className="glass-card">
+                <SelectTrigger className="mt-2">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -659,9 +655,10 @@ const DashboardHome = () => {
                 </SelectContent>
               </Select>
             </div>
+
             {/* Withdraw Amount */}
             <div>
-              <label className="text-sm font-medium">Amount (5 - 5000 USDT)</label>
+              <label className="text-sm font-medium text-gray-800">Amount (5 - 5000 USDT)</label>
               <Input 
                 type="number"
                 min={5}
@@ -669,24 +666,26 @@ const DashboardHome = () => {
                 placeholder="Enter amount"
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
-                className="glass-card"
+                className="mt-2"
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-gray-600 mt-1">
                 Available: ${(walletData.total_profit + realTimeEarnings).toFixed(2)} USDT
               </p>
             </div>
+
             {/* Withdraw Address */}
             <div>
-              <label className="text-sm font-medium">Wallet Address</label>
+              <label className="text-sm font-medium text-gray-800">Wallet Address</label>
               <Input 
                 placeholder="Enter your wallet address"
                 value={withdrawAddress}
                 onChange={(e) => setWithdrawAddress(e.target.value)}
-                className="glass-card"
+                className="mt-2"
               />
             </div>
+
             <Button 
-              className="w-full btn-cyber"
+              className="w-full bg-[#FFA500] text-white"
               onClick={handleWithdrawSubmit}
               disabled={!withdrawAddress || !withdrawAmount}
             >
@@ -696,41 +695,41 @@ const DashboardHome = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Withdrawals List (Admin/User Panel) */}
-      <Card className="glass-card p-4">
-        <h3 className="font-bold mb-2">Your Withdrawals</h3>
+      {/* ---------- Withdrawals List (light card) ---------- */}
+      <div className="w-full bg-gray-100 rounded-xl p-4">
+        <h3 className="font-bold mb-2 text-gray-900">Your Withdrawals</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr>
-                <th className="text-left py-1">Amount</th>
-                <th className="text-left py-1">Blockchain</th>
-                <th className="text-left py-1">Address</th>
-                <th className="text-left py-1">Status</th>
-                <th className="text-left py-1">Date</th>
+                <th className="text-left py-1 text-gray-700">Amount</th>
+                <th className="text-left py-1 text-gray-700">Blockchain</th>
+                <th className="text-left py-1 text-gray-700">Address</th>
+                <th className="text-left py-1 text-gray-700">Status</th>
+                <th className="text-left py-1 text-gray-700">Date</th>
               </tr>
             </thead>
             <tbody>
               {withdrawals.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-2 text-center text-muted-foreground">
+                  <td colSpan={5} className="py-2 text-center text-gray-600">
                     No withdrawals found.
                   </td>
                 </tr>
               )}
               {withdrawals.map(w => (
                 <tr key={w.id}>
-                  <td className="py-1 font-bold">${w.amount}</td>
-                  <td className="py-1">{w.blockchain}</td>
-                  <td className="py-1 break-all font-mono">{w.wallet_address}</td>
-                  <td className="py-1">{w.status || 'Pending'}</td>
-                  <td className="py-1">{w.created_at ? new Date(w.created_at).toLocaleString() : ''}</td>
+                  <td className="py-1 font-bold text-gray-800">${w.amount}</td>
+                  <td className="py-1 text-gray-800">{w.blockchain}</td>
+                  <td className="py-1 break-all font-mono text-gray-700">{w.wallet_address}</td>
+                  <td className="py-1 text-gray-800">{w.status || 'Pending'}</td>
+                  <td className="py-1 text-gray-700">{w.created_at ? new Date(w.created_at).toLocaleString() : ''}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };
