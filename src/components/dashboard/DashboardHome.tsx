@@ -639,7 +639,7 @@ const DashboardHome = () => {
       <Dialog open={showWithdrawModal} onOpenChange={setShowWithdrawModal}>
         <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
-            <DialogTitle>>Withdraw USDT</DialogTitle>
+            <DialogTitle>>WITHDRAW USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {/* Blockchain Select */}
