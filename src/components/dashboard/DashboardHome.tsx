@@ -447,7 +447,7 @@ const DashboardHome = () => {
               <p className="text-xs text-white/90">2.2% Live Growth</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-bold text-white">+${realTimeEarnings.toFixed(6)} USDT</p>
+              <p className="text-lg font-bold text-white">+${realTimeEarnings.toFixed(6)} USDT</p>
               <p className="text-xs text-white/90 animate-pulse">Growing every second...</p>
             </div>
           </div>
@@ -534,23 +534,23 @@ const DashboardHome = () => {
         </div>
       )}
 
-      {/* ---------- Deposit Modal ---------- */}
-      <Dialog open={showDepositModal} onOpenChange={setShowDepositModal}>
-        <DialogContent className="bg-white rounded-xl p-4">
-          <DialogHeader>
-            <DialogTitle>Deposit USDT</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-black">Amount (USDT)</label>
-              <Input 
-                type="number" 
-                placeholder="Enter amount"
-                value={depositAmount}
-                onChange={(e) => setDepositAmount(e.target.value)}
-                className="mt-2"
-              />
-            </div>
+            {/* ---------- Deposit Modal ---------- */}
+       <Dialog open={showDepositModal} onOpenChange={setShowDepositModal}>
+       <DialogContent className="bg-white rounded-xl p-4">
+     <DialogHeader>
+      <DialogTitle className="text-black">Deposit USDT</DialogTitle>
+    </DialogHeader>
+    <div className="space-y-4">
+      <div>
+        <label className="text-sm font-medium text-black">Amount (USDT)</label>
+        <Input 
+          type="number" 
+          placeholder="Enter amount"
+          value={depositAmount}
+          onChange={(e) => setDepositAmount(e.target.value)}
+          className="mt-2"
+        />
+      </div>
             <div>
               <label className="text-sm font-medium mb-2 block text-black">Quick Select</label>
               <div className="grid grid-cols-4 gap-2">
@@ -639,7 +639,7 @@ const DashboardHome = () => {
       <Dialog open={showWithdrawModal} onOpenChange={setShowWithdrawModal}>
         <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
-            <DialogTitle>WITHDRAW USDT</DialogTitle>
+            <DialogTitle className="text-black">>Withdraw USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {/* Blockchain Select */}
