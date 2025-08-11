@@ -426,7 +426,7 @@ const DashboardHome = () => {
               className="h-8 w-8 bg-white/20 hover:bg-white/30"
               onClick={() => setShowWithdrawModal(true)}
             >
-              <ArrowUp className="w-4 h-4 text-white" />
+              <ArrowUp className="w-4 h-4 text-black" />
             </Button>
           </div>
         </div>
@@ -462,7 +462,7 @@ const DashboardHome = () => {
           className="w-48 h-auto object-contain"
         />
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-gray-900">🚀 Zerthyx Power NFT</h3>
+          <h2 className="text-lg font-semibold text-gray-900">🚀 Zerthyx Power NFT</h2>
           <p className="text-sm text-gray-700 mt-1">
             2.2% Daily Return — 45-Day Cycle. Auto rewards delivered every 24 hours.
           </p>
