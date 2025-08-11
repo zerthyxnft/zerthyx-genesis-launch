@@ -538,7 +538,7 @@ const DashboardHome = () => {
        <Dialog open={showDepositModal} onOpenChange={setShowDepositModal}>
        <DialogContent className="bg-white rounded-xl p-4">
      <DialogHeader>
-      <DialogTitle className="text-black">Deposit USDT</DialogTitle>
+      <DialogTitle>Deposit USDT</DialogTitle>
     </DialogHeader>
     <div className="space-y-4">
       <div>
@@ -639,7 +639,7 @@ const DashboardHome = () => {
       <Dialog open={showWithdrawModal} onOpenChange={setShowWithdrawModal}>
         <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
-            <DialogTitle className="text-black">>Withdraw USDT</DialogTitle>
+            <DialogTitle>>Withdraw USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {/* Blockchain Select */}
