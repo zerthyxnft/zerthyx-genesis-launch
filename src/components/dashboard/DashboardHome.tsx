@@ -426,7 +426,7 @@ const DashboardHome = () => {
               className="h-8 w-8 bg-white/20 hover:bg-white/30"
               onClick={() => setShowWithdrawModal(true)}
             >
-              <ArrowUp className="w-4 h-4 text-black" />
+              <ArrowUp className="w-4 h-4 text-white" />
             </Button>
           </div>
         </div>
@@ -462,8 +462,8 @@ const DashboardHome = () => {
           className="w-48 h-auto object-contain"
         />
         <div className="text-center">
-          <h2 className="text-lg font-semibold text-gray-900">🚀 Zerthyx Power NFT</h2>
-          <p className="text-sm text-gray-700 mt-1">
+          <h3 className="text-lg font-semibold text-black">🚀 Zerthyx Power NFT</h3>
+          <p className="text-sm text-black mt-1">
             2.2% Daily Return — 45-Day Cycle. Auto rewards delivered every 24 hours.
           </p>
         </div>
@@ -473,13 +473,13 @@ const DashboardHome = () => {
       <div className="w-full bg-gray-100 rounded-xl p-4 text-xs">
         <div dangerouslySetInnerHTML={{
           __html: `
-            <p><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
-            <p>💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
-            <p>⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
-            <p>🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
-            <p>🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
-            <p>⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
-            <p>🔥 <strong>Limited Supply</strong> – Don’t miss your chance to hold this high-yield NFT.</p>
+            <p style="color:#000"><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
+            <p style="color:#000">💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
+            <p style="color:#000">⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
+            <p style="color:#000">🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
+            <p style="color:#000">🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
+            <p style="color:#000">⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
+            <p style="color:#000">🔥 <strong>Limited Supply</strong> – Don’t miss your chance to hold this high-yield NFT.</p>
           `
         }}/>
       </div>
@@ -542,7 +542,7 @@ const DashboardHome = () => {
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-gray-800">Amount (USDT)</label>
+              <label className="text-sm font-medium text-black">Amount (USDT)</label>
               <Input 
                 type="number" 
                 placeholder="Enter amount"
@@ -552,7 +552,7 @@ const DashboardHome = () => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-2 block text-gray-800">Quick Select</label>
+              <label className="text-sm font-medium mb-2 block text-black">Quick Select</label>
               <div className="grid grid-cols-4 gap-2">
                 {presetAmounts.map(amount => (
                   <Button
@@ -560,7 +560,7 @@ const DashboardHome = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handlePresetAmount(amount)}
-                    className="bg-white"
+                    className="bg-white text-black"
                   >
                     ${amount}
                   </Button>
@@ -570,7 +570,7 @@ const DashboardHome = () => {
             {showPaymentDetails && (
               <div className="space-y-4 border-t pt-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-800">Blockchain</label>
+                  <label className="text-sm font-medium text-black">Blockchain</label>
                   <Select value={selectedBlockchain} onValueChange={setSelectedBlockchain}>
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -583,7 +583,7 @@ const DashboardHome = () => {
                 </div>
                 <div className="bg-gray-100 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-medium text-gray-800">Deposit Address:</p>
+                    <p className="text-sm font-medium text-black">Deposit Address:</p>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -592,12 +592,12 @@ const DashboardHome = () => {
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
-                  <p className="text-xs break-all font-mono bg-white p-2 rounded text-gray-700">
+                  <p className="text-xs break-all font-mono bg-white p-2 rounded text-black">
                     {depositAddresses[selectedBlockchain]}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-800">Upload Payment Screenshot</label>
+                  <label className="text-sm font-medium text-black">Upload Payment Screenshot</label>
                   <div 
                     className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors"
                     onClick={() => fileInputRef.current?.click()}
@@ -605,12 +605,12 @@ const DashboardHome = () => {
                     {uploadedFile ? (
                       <div className="flex items-center justify-center gap-2 text-green-600">
                         <CheckCircle className="w-5 h-5" />
-                        <span className="text-sm">{uploadedFile.name}</span>
+                        <span className="text-sm text-black">{uploadedFile.name}</span>
                       </div>
                     ) : (
                       <div className="space-y-2">
                         <Upload className="w-8 h-8 mx-auto text-gray-500" />
-                        <p className="text-sm text-gray-600">Click to upload screenshot</p>
+                        <p className="text-sm text-black">Click to upload screenshot</p>
                       </div>
                     )}
                   </div>
@@ -644,7 +644,7 @@ const DashboardHome = () => {
           <div className="space-y-4">
             {/* Blockchain Select */}
             <div>
-              <label className="text-sm font-medium text-gray-800">Blockchain</label>
+              <label className="text-sm font-medium text-black">Blockchain</label>
               <Select value={selectedBlockchain} onValueChange={setSelectedBlockchain}>
                 <SelectTrigger className="mt-2">
                   <SelectValue />
@@ -658,7 +658,7 @@ const DashboardHome = () => {
 
             {/* Withdraw Amount */}
             <div>
-              <label className="text-sm font-medium text-gray-800">Amount (5 - 5000 USDT)</label>
+              <label className="text-sm font-medium text-black">Amount (5 - 5000 USDT)</label>
               <Input 
                 type="number"
                 min={5}
@@ -668,14 +668,14 @@ const DashboardHome = () => {
                 onChange={(e) => setWithdrawAmount(e.target.value)}
                 className="mt-2"
               />
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-xs text-black mt-1">
                 Available: ${(walletData.total_profit + realTimeEarnings).toFixed(2)} USDT
               </p>
             </div>
 
             {/* Withdraw Address */}
             <div>
-              <label className="text-sm font-medium text-gray-800">Wallet Address</label>
+              <label className="text-sm font-medium text-black">Wallet Address</label>
               <Input 
                 placeholder="Enter your wallet address"
                 value={withdrawAddress}
