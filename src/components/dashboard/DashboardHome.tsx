@@ -447,7 +447,7 @@ const DashboardHome = () => {
               <p className="text-xs text-white/90">2.2% Live Growth</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-white">+${realTimeEarnings.toFixed(6)} USDT</p>
+              <p className="text-sm font-bold text-white">+${realTimeEarnings.toFixed(6)} USDT</p>
               <p className="text-xs text-white/90 animate-pulse">Growing every second...</p>
             </div>
           </div>
