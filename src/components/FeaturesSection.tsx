@@ -19,7 +19,7 @@ const FeaturesSection = () => {
       icon: <Coins className="w-8 h-8 text-primary" />,
       title: "Zerthyx NFTs",
       description: "World's Most Valuable NFT Collection",
-      highlight: "₹50 Lakh+ Value",
+      highlight: "₹200B Value",
       image: ztyxTokens
     },
     {
