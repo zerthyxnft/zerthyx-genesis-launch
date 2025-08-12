@@ -77,12 +77,15 @@ const DashboardMine = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
       const { data: wallet } = await supabase
         .from('mining_wallets')
         .select('*')
         .eq('user_id', user.id)
         .single();
+
       setMiningWallet(wallet);
+
       const { data: session } = await supabase
         .from('mining_sessions')
         .select('*')
@@ -90,6 +93,7 @@ const DashboardMine = () => {
         .order('created_at', { ascending: false })
         .limit(1)
         .single();
+
       setLastSession(session);
     } catch (error) {
       console.error('Error fetching mining data:', error);
@@ -98,22 +102,29 @@ const DashboardMine = () => {
 
   const handleClaim = async () => {
     if (!canClaim || isClaiming) return;
+
     setIsClaiming(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
       const { data, error } = await supabase.rpc('process_mining_claim', {
         user_id_param: user.id
       });
+
       if (error) throw error;
+
       const result = data as unknown as MiningClaimResult;
+
       if (result.success) {
         setAnimatingPoints(true);
         setTimeout(() => setAnimatingPoints(false), 2000);
+        
         toast({
           title: "Mining successful!",
           description: `You earned ${result.points_earned} points!`,
         });
+
         fetchMiningData();
       } else {
         toast({
@@ -145,7 +156,63 @@ const DashboardMine = () => {
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-16 w-1 h-1 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute top-60 left-20 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-40 right-10 w-2 h-2 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute bottom-60 left-8 w-1 h-1 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       <div className="relative z-10 p-6 max-w-md mx-auto">
+        {/* Header - ZTYX MINE top-left */}
+        <div className="flex items-center mb-6">
+          <div className="flex items-center space-x-2">
+            <div className="p-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+              <Pickaxe className="w-6 h-6 text-amber-400" />
+            </div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+              ZTYX MINE
+            </h1>
+          </div>
+        </div>
+
+        {/* Mining Wallet (moved to top under header) */}
+        <Card className="w-full min-h-[200px] bg-gradient-to-br from-green-200/80 to-green-100 border-green-400 p-8 mb-8 relative overflow-hidden shadow-xl scale-105">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-200/50 to-transparent rounded-full"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <Gem className="w-6 h-6 text-green-800" />
+                <span className="text-base font-bold text-green-800">MINING WALLET</span>
+              </div>
+              <Sparkles className="w-5 h-5 text-green-700 animate-pulse" />
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-green-900 uppercase">Total Points</p>
+                <p className={`text-4xl font-extrabold text-green-900 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
+                  {miningWallet?.total_points?.toLocaleString() || '0'}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <p className="text-xs text-green-800">Today’s Points</p>
+                  <p className="text-2xl font-bold text-green-700">
+                    {miningWallet?.today_points?.toLocaleString() || '0'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-green-800">Today’s Claims</p>
+                  <p className="text-2xl font-bold text-green-700">
+                    {miningWallet?.today_claims || 0}/24
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
 
         {/* Timer with animated gems/coins */}
         <div className="p-6 mb-4 flex flex-col items-center relative">
@@ -237,11 +304,13 @@ const DashboardMine = () => {
               {miningWallet?.today_points?.toLocaleString() || '0'}
             </p>
           </Card>
+          
           <Card className="glass-card p-3 text-center">
             <Trophy className="w-5 h-5 text-purple-400 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">daily limit</p>
             <p className="text-sm font-bold text-purple-400">24,000</p>
           </Card>
+          
           <Card className="glass-card p-3 text-center">
             <Star className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">streak</p>
@@ -250,42 +319,6 @@ const DashboardMine = () => {
             </p>
           </Card>
         </div>
-
-        {/* Mining Wallet */}
-        <Card className="w-full min-h-[200px] bg-gradient-to-br from-green-200/80 to-green-100 border-green-400 p-8 mb-8 relative overflow-hidden shadow-xl scale-105">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-200/50 to-transparent rounded-full"></div>
-          <div className="relative">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-3">
-                <Gem className="w-6 h-6 text-green-800" />
-                <span className="text-base font-bold text-green-800">MINING WALLET</span>
-              </div>
-              <Sparkles className="w-5 h-5 text-green-700 animate-pulse" />
-            </div>
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-green-900 uppercase">Total Points</p>
-                <p className={`text-4xl font-extrabold text-green-900 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
-                  {miningWallet?.total_points?.toLocaleString() || '0'}
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <p className="text-xs text-green-800">Today’s Points</p>
-                  <p className="text-2xl font-bold text-green-700">
-                    {miningWallet?.today_points?.toLocaleString() || '0'}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-green-800">Today’s Claims</p>
-                  <p className="text-2xl font-bold text-green-700">
-                    {miningWallet?.today_claims || 0}/24
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
 
         {miningWallet?.today_claims === 24 && (
           <Card className="glass-card p-4 mt-4 border-orange-500/50">
