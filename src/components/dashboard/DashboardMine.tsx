@@ -178,7 +178,6 @@ const DashboardMine = () => {
               ZTYX MINE
             </h1>
           </div>
-          {/* Settings Button Removed */}
         </div>
 
         {/* MINING WALLET Display */}
@@ -219,36 +218,47 @@ const DashboardMine = () => {
           </div>
         </Card>
 
-        {/* Countdown Timer */}
-        <Card className="glass-card p-6 mb-6">
-          <div className="text-center">
-            <div className={`relative inline-flex items-center justify-center w-24 h-24 rounded-full border-4 mb-4 ${
-              canClaim 
-                ? 'border-green-400 bg-green-400/10 cyber-glow' 
-                : 'border-amber-400/50 bg-amber-400/5'
-            }`}>
-              <div className="absolute inset-2 rounded-full border-2 border-dashed border-current animate-spin opacity-30" style={{ animationDuration: '10s' }}></div>
-              {canClaim ? (
-                <Pickaxe className="w-8 h-8 text-green-400 animate-bounce" />
-              ) : (
-                <Timer className="w-8 h-8 text-amber-400" />
-              )}
+        {/* Countdown Timer - New Stylish Animation */}
+        <div className="p-6 mb-8 flex flex-col items-center">
+          <div className="relative w-36 h-36 flex items-center justify-center">
+            <div className={`absolute inset-0 rounded-full border-4 ${
+              canClaim ? 'border-green-400' : 'border-amber-300'
+            } animate-spin-slow`} />
+            <div className={`absolute inset-3 rounded-full border-2 border-dashed ${
+              canClaim ? 'border-green-300' : 'border-amber-200'
+            } animate-spin-reverse-slower`} />
+            <div className="absolute w-full h-full">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1.5 h-1.5 bg-yellow-300 rounded-full animate-ping"
+                  style={{
+                    top: `${Math.random() * 100}%`,
+                    left: `${Math.random() * 100}%`,
+                    animationDelay: `${i * 0.3}s`
+                  }}
+                ></div>
+              ))}
             </div>
-            
-            <div className="space-y-2">
-              {canClaim ? (
-                <p className="text-lg font-bold text-green-400">Mining ready!</p>
-              ) : (
-                <>
-                  <p className="text-sm text-muted-foreground">next mine available:</p>
-                  <p className="text-xl font-mono font-bold text-amber-400">
-                    {formatTime(timeLeft)}
-                  </p>
-                </>
-              )}
-            </div>
+            {canClaim ? (
+              <Pickaxe className="w-10 h-10 text-green-400 animate-bounce" />
+            ) : (
+              <Timer className="w-10 h-10 text-amber-400 animate-pulse" />
+            )}
           </div>
-        </Card>
+          <div className="mt-4 text-center">
+            {canClaim ? (
+              <p className="text-lg font-bold text-green-500">Mining Ready!</p>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500">Next mine available:</p>
+                <p className="text-2xl font-mono font-bold text-amber-400">
+                  {formatTime(timeLeft)}
+                </p>
+              </>
+            )}
+          </div>
+        </div>
 
         {/* Daily Progress */}
         <Card className="glass-card p-4 mb-6">
@@ -310,12 +320,10 @@ const DashboardMine = () => {
                 }
               </span>
             </div>
-            
             {canClaim && (
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]"></div>
             )}
           </Button>
-          
           {canClaim && (
             <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
           )}
