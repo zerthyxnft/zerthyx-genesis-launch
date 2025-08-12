@@ -158,7 +158,7 @@ const DashboardMine = () => {
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Animated Background */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-10 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
         <div className="absolute top-40 right-16 w-1 h-1 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
@@ -180,36 +180,34 @@ const DashboardMine = () => {
           </div>
         </div>
 
-        {/* MINING WALLET Display */}
-        <Card className="w-full bg-gradient-to-br from-green-200/60 to-green-100 border-green-300 p-6 mb-6 relative overflow-hidden shadow-xl">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200/50 to-transparent rounded-full"></div>
+        {/* Mining Wallet */}
+        <Card className="w-full bg-gradient-to-br from-green-100 to-green-50 border-green-300 p-8 mb-6 relative overflow-hidden shadow-2xl rounded-2xl">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-200/40 to-transparent rounded-full"></div>
           <div className="relative">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
               <div className="flex items-center space-x-2">
-                <Gem className="w-5 h-5 text-green-700" />
-                <span className="text-sm font-semibold text-green-700">MINING WALLET</span>
+                <Gem className="w-6 h-6 text-green-700" />
+                <span className="text-base font-semibold text-green-800">MINING WALLET</span>
               </div>
-              <Sparkles className="w-4 h-4 text-green-700 animate-pulse" />
+              <Sparkles className="w-5 h-5 text-green-700 animate-pulse" />
             </div>
-            
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
-                <p className="text-sm text-green-800">total points</p>
-                <p className={`text-2xl font-bold text-green-900 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
+                <p className="text-sm text-green-700">Total Points</p>
+                <p className={`text-3xl font-extrabold text-green-900 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
                   {miningWallet?.total_points?.toLocaleString() || '0'}
                 </p>
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs text-green-800">today's points</p>
-                  <p className="text-lg font-bold text-green-700">
+                  <p className="text-sm text-green-700">Today's Points</p>
+                  <p className="text-xl font-bold text-green-800">
                     {miningWallet?.today_points?.toLocaleString() || '0'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-green-800">today's claims</p>
-                  <p className="text-lg font-bold text-green-700">
+                  <p className="text-sm text-green-700">Today's Claims</p>
+                  <p className="text-xl font-bold text-green-800">
                     {miningWallet?.today_claims || 0}/24
                   </p>
                 </div>
@@ -218,28 +216,22 @@ const DashboardMine = () => {
           </div>
         </Card>
 
-        {/* Countdown Timer - New Stylish Animation */}
-        <div className="p-6 mb-8 flex flex-col items-center">
+        {/* Countdown Timer + Gems Animation */}
+        <div className="p-6 mb-4 flex flex-col items-center relative">
           <div className="relative w-36 h-36 flex items-center justify-center">
-            <div className={`absolute inset-0 rounded-full border-4 ${
-              canClaim ? 'border-green-400' : 'border-amber-300'
-            } animate-spin-slow`} />
-            <div className={`absolute inset-3 rounded-full border-2 border-dashed ${
-              canClaim ? 'border-green-300' : 'border-amber-200'
-            } animate-spin-reverse-slower`} />
-            <div className="absolute w-full h-full">
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-1.5 h-1.5 bg-yellow-300 rounded-full animate-ping"
-                  style={{
-                    top: `${Math.random() * 100}%`,
-                    left: `${Math.random() * 100}%`,
-                    animationDelay: `${i * 0.3}s`
-                  }}
-                ></div>
-              ))}
-            </div>
+            <div className={`absolute inset-0 rounded-full border-4 ${canClaim ? 'border-green-400' : 'border-amber-300'} animate-spin-slow`} />
+            <div className={`absolute inset-3 rounded-full border-2 border-dashed ${canClaim ? 'border-green-300' : 'border-amber-200'} animate-spin-reverse-slower`} />
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-5 h-5 bg-yellow-300 rounded-full animate-bounce"
+                style={{
+                  top: `${Math.random() * 80}%`,
+                  left: `${Math.random() * 80}%`,
+                  animationDelay: `${i * 0.5}s`
+                }}
+              ></div>
+            ))}
             {canClaim ? (
               <Pickaxe className="w-10 h-10 text-green-400 animate-bounce" />
             ) : (
@@ -261,72 +253,36 @@ const DashboardMine = () => {
         </div>
 
         {/* Daily Progress */}
-        <Card className="glass-card p-4 mb-6">
+        <Card className="p-4 mb-4 bg-gradient-to-r from-green-100 to-blue-100 border-green-300 shadow-lg">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">daily progress</span>
+            <span className="text-sm font-medium text-green-800">Daily Progress</span>
             <span className="text-sm font-bold">{miningWallet?.today_claims || 0}/24</span>
           </div>
-          <Progress value={dailyProgress} className="h-2 mb-2" />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <Progress value={dailyProgress} className="h-2 rounded-full bg-green-200" />
+          <div className="flex justify-between text-xs text-green-700 mt-1">
             <span>0</span>
             <span>24,000 points</span>
           </div>
         </Card>
 
-        {/* Statistics */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <Card className="glass-card p-3 text-center">
-            <Zap className="w-5 h-5 text-blue-400 mx-auto mb-1" />
-            <p className="text-xs text-muted-foreground">today's mining</p>
-            <p className="text-sm font-bold text-blue-400">
-              {miningWallet?.today_points?.toLocaleString() || '0'}
-            </p>
-          </Card>
-          
-          <Card className="glass-card p-3 text-center">
-            <Trophy className="w-5 h-5 text-purple-400 mx-auto mb-1" />
-            <p className="text-xs text-muted-foreground">daily limit</p>
-            <p className="text-sm font-bold text-purple-400">24,000</p>
-          </Card>
-          
-          <Card className="glass-card p-3 text-center">
-            <Star className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
-            <p className="text-xs text-muted-foreground">streak</p>
-            <p className="text-sm font-bold text-yellow-400">
-              {miningWallet?.today_claims || 0}
-            </p>
-          </Card>
-        </div>
-
-        {/* Mining Button */}
-        <div className="relative">
+        {/* Collect Button */}
+        <div className="relative mb-6">
           <Button 
             onClick={handleClaim}
             disabled={!canClaim || isClaiming}
-            className={`w-full h-16 text-lg font-bold relative overflow-hidden transition-all duration-300 ${
+            className={`w-full h-14 text-lg font-bold rounded-xl shadow-md transition-all duration-300 ${
               canClaim 
-                ? 'btn-cyber hover:scale-105 cyber-glow' 
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
+                ? 'bg-gradient-to-r from-green-400 to-green-600 text-white hover:scale-105' 
+                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
             }`}
           >
-            <div className="flex items-center justify-center space-x-3">
-              <Coins className={`w-6 h-6 ${canClaim ? 'animate-bounce' : ''}`} />
-              <span>
-                {isClaiming 
-                  ? 'Mining is going on...' 
-                  : canClaim 
-                    ? 'COLLECT NOW +1000 POINTS' 
-                    : `Next mine: ${formatTime(timeLeft)}`
-                }
-              </span>
-            </div>
-            {canClaim && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]"></div>
-            )}
+            {isClaiming 
+              ? 'Mining in Progress...' 
+              : canClaim 
+                ? 'COLLECT NOW +1000 POINTS' 
+                : `Next mine: ${formatTime(timeLeft)}`
+            }
           </Button>
-          {canClaim && (
-            <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
-          )}
         </div>
 
         {miningWallet?.today_claims === 24 && (
