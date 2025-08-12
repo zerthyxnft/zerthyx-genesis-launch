@@ -14,7 +14,6 @@ import {
   Coins,
   Timer,
   Trophy,
-  Settings,
   Sparkles
 } from 'lucide-react';
 
@@ -81,7 +80,6 @@ const DashboardMine = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch mining wallet
       const { data: wallet } = await supabase
         .from('mining_wallets')
         .select('*')
@@ -90,7 +88,6 @@ const DashboardMine = () => {
 
       setMiningWallet(wallet);
 
-      // Fetch last session
       const { data: session } = await supabase
         .from('mining_sessions')
         .select('*')
@@ -133,7 +130,7 @@ const DashboardMine = () => {
         fetchMiningData();
       } else {
         toast({
-          title: "mining failed",
+          title: "Mining failed",
           description: result.message,
           variant: "destructive",
         });
@@ -142,7 +139,7 @@ const DashboardMine = () => {
       console.error('Error claiming mining:', error);
       toast({
         title: "Error",
-        description: "There was a problem with mining।",
+        description: "There was a problem with mining.",
         variant: "destructive",
       });
     } finally {
@@ -168,16 +165,11 @@ const DashboardMine = () => {
         <div className="absolute top-60 left-20 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute bottom-40 right-10 w-2 h-2 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
         <div className="absolute bottom-60 left-8 w-1 h-1 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        
-        {/* Floating Particles */}
-        <div className="floating absolute top-32 left-1/4 w-3 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full opacity-60"></div>
-        <div className="floating absolute top-48 right-1/3 w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full opacity-60" style={{ animationDelay: '1s' }}></div>
-        <div className="floating absolute bottom-32 left-1/3 w-2.5 h-2.5 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full opacity-60" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="relative z-10 p-6 max-w-md mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center mb-6">
           <div className="flex items-center space-x-2">
             <div className="p-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
               <Pickaxe className="w-6 h-6 text-amber-400" />
@@ -186,41 +178,39 @@ const DashboardMine = () => {
               ZTYX MINE
             </h1>
           </div>
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-            <Settings className="w-5 h-5" />
-          </Button>
+          {/* Settings Button Removed */}
         </div>
 
         {/* MINING WALLET Display */}
-        <Card className="bg-gradient-to-br from-accent/20 to-accent/10 border-accent/30 p-6 mb-6 relative overflow-hidden shadow-xl">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-accent/20 to-transparent rounded-full"></div>
+        <Card className="w-full bg-gradient-to-br from-green-200/60 to-green-100 border-green-300 p-6 mb-6 relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200/50 to-transparent rounded-full"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
-                <Gem className="w-5 h-5 text-accent" />
-                <span className="text-sm font-semibold text-accent">MINING WALLET</span>
+                <Gem className="w-5 h-5 text-green-700" />
+                <span className="text-sm font-semibold text-green-700">MINING WALLET</span>
               </div>
-              <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+              <Sparkles className="w-4 h-4 text-green-700 animate-pulse" />
             </div>
             
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-muted-foreground">total points</p>
-                <p className={`text-2xl font-bold text-amber-400 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
+                <p className="text-sm text-green-800">total points</p>
+                <p className={`text-2xl font-bold text-green-900 ${animatingPoints ? 'animate-pulse scale-110' : ''} transition-all duration-500`}>
                   {miningWallet?.total_points?.toLocaleString() || '0'}
                 </p>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs text-muted-foreground">today's points</p>
-                  <p className="text-lg font-bold text-green-400">
+                  <p className="text-xs text-green-800">today's points</p>
+                  <p className="text-lg font-bold text-green-700">
                     {miningWallet?.today_points?.toLocaleString() || '0'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">today's claims</p>
-                  <p className="text-lg font-bold text-blue-400">
+                  <p className="text-xs text-green-800">today's claims</p>
+                  <p className="text-lg font-bold text-green-700">
                     {miningWallet?.today_claims || 0}/24
                   </p>
                 </div>
@@ -331,7 +321,6 @@ const DashboardMine = () => {
           )}
         </div>
 
-        {/* Daily Limit Warning */}
         {miningWallet?.today_claims === 24 && (
           <Card className="glass-card p-4 mt-4 border-orange-500/50">
             <div className="flex items-center space-x-2 text-orange-400">
