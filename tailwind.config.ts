@@ -30,8 +30,8 @@ export default {
         foreground: "hsl(var(--foreground))",
 
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#6ee7b7", // हल्का ग्रीन थीम
+          foreground: "#064e3b",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -46,16 +46,16 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#bbf7d0", // ग्रीनिश एक्सेंट
+          foreground: "#065f46",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#ecfdf5", // वॉलेट बैकग्राउंड के लिए हल्का ग्रीन
+          foreground: "#064e3b",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
