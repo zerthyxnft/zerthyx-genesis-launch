@@ -209,8 +209,8 @@ const DashboardMe = () => {
         </Button>
       </div>
 
-      {/* User Info Card */}
-      <Card className="p-6 mb-6 relative overflow-hidden bg-[#CCCC00]"> {/* Arbitrary value for dark yellow */}
+      {/* User Info Card - Dark Yellow */}
+      <Card className="p-6 mb-6 relative overflow-hidden bg-[#CCCC00]">
         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full"></div>
         <div className="relative">
           <div className="flex items-center space-x-4 mb-4">
@@ -257,7 +257,7 @@ const DashboardMe = () => {
 
       {/* Quick Links Section */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold mb-4 flex items-center text-black"> {/* Black text class */}
+        <h2 className="text-lg font-bold mb-4 flex items-center text-black">
           <Sparkles className="w-5 h-5 mr-2 text-yellow-400" />
           Quick Links
         </h2>
@@ -267,7 +267,7 @@ const DashboardMe = () => {
             return (
               <Card
                 key={link.id}
-                className="p-4 hover:scale-105 transition-transform cursor-pointer bg-gray-200" {/* Tailwind's built-in light gray */}
+                className="p-4 hover:scale-105 transition-transform cursor-pointer bg-[#E0E0E0]"
                 onClick={link.action}
               >
                 <div className="flex items-center justify-between">
@@ -289,7 +289,7 @@ const DashboardMe = () => {
       </div>
 
       {/* App Download Promotion */}
-      <Card className="p-4 mb-6 border-green-500/30 bg-gray-200"> {/* Tailwind's built-in light gray */}
+      <Card className="p-4 mb-6 border-green-500/30 bg-[#E0E0E0]">
         <div className="flex items-center space-x-3">
           <div className="p-2 rounded-lg bg-green-500/20">
             <Smartphone className="w-6 h-6 text-green-400" />
@@ -312,7 +312,7 @@ const DashboardMe = () => {
 
       {/* Admin Panel Button - Only for Admins */}
       {isAdmin && (
-        <Card className="p-4 mb-6 border-orange-500/30 bg-gray-200"> {/* Tailwind's built-in light gray */}
+        <Card className="p-4 mb-6 border-orange-500/30 bg-[#E0E0E0]">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-lg bg-orange-500/20">
               <Shield className="w-6 h-6 text-orange-400" />
@@ -339,13 +339,13 @@ const DashboardMe = () => {
         <AlertDialogTrigger asChild>
           <Button
             variant="outline"
-            className="w-full h-12 border-red-500/50 hover:bg-red-500/10 hover:text-red-300 bg-red-600 text-black" {/* Tailwind's red color palette */}
+            className="w-full h-12 border-red-500/50 hover:bg-red-500/10 hover:text-red-300 bg-red-600 text-black"
           >
             <LogOut className="w-5 h-5 mr-2" />
             Logout
           </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent className="bg-gray-200"> {/* Tailwind's built-in light gray */}
+        <AlertDialogContent className="bg-[#E0E0E0]">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
             <AlertDialogDescription>
