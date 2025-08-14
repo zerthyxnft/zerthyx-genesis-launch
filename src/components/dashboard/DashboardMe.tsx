@@ -193,7 +193,7 @@ const DashboardMe = () => {
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white min-h-screen">
+    <div className="p-6 max-w-md mx-auto min-h-screen bg-gray-100">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
@@ -209,55 +209,51 @@ const DashboardMe = () => {
         </Button>
       </div>
 
-      {/* User Info Card - Dark Yellow */}
-      <Card className="p-6 mb-6 relative overflow-hidden bg-[#CCCC00]">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full"></div>
+      {/* User Info Card - Deep Blue with Light Blue Gradient */}
+      <Card className="p-6 mb-6 relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-md rounded-lg">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/20 rounded-full"></div>
         <div className="relative">
           <div className="flex items-center space-x-4 mb-4">
             <div className="relative">
-              <Avatar className="w-16 h-16 border-2 border-primary/30">
+              <Avatar className="w-16 h-16 border-2 border-blue-300">
                 <AvatarImage src={userProfile?.avatar_url} alt={userProfile?.name} />
-                <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-lg">
+                <AvatarFallback className="bg-blue-500 text-white font-bold text-lg">
                   {userProfile ? getUserInitials(userProfile.name) : 'U'}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-background flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                 <div className="w-2 h-2 bg-white rounded-full"></div>
               </div>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-foreground mb-1">
-                {userProfile?.name || 'User'}
-              </h2>
-              <p className="text-sm text-muted-foreground mb-1">
-                {userProfile?.email || 'No email'}
-              </p>
+              <h2 className="text-xl font-bold mb-1">{userProfile?.name || 'User'}</h2>
+              <p className="text-sm text-blue-200 mb-1">{userProfile?.email || 'No email'}</p>
               <div className="flex items-center space-x-1">
                 <Crown className="w-3 h-3 text-yellow-400" />
-                <span className="text-xs text-yellow-400 font-medium">Premium Member</span>
+                <span className="text-xs text-yellow-300 font-medium">Premium Member</span>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/50">
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-blue-300/50">
             <div className="text-center">
-              <p className="text-lg font-bold text-green-400">Active</p>
-              <p className="text-xs text-muted-foreground">Status</p>
+              <p className="text-lg font-bold text-green-300">Active</p>
+              <p className="text-xs text-blue-200">Status</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-blue-400">2.5k</p>
-              <p className="text-xs text-muted-foreground">Points</p>
+              <p className="text-lg font-bold text-yellow-300">2.5k</p>
+              <p className="text-xs text-blue-200">Points</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-purple-400">15</p>
-              <p className="text-xs text-muted-foreground">Tasks</p>
+              <p className="text-lg font-bold text-purple-300">15</p>
+              <p className="text-xs text-blue-200">Tasks</p>
             </div>
           </div>
         </div>
       </Card>
 
-      {/* Quick Links Section */}
+      {/* Quick Links Section - Deep Blue Heading */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold mb-4 flex items-center text-black">
+        <h2 className="text-lg font-bold mb-4 flex items-center text-blue-600">
           <Sparkles className="w-5 h-5 mr-2 text-yellow-400" />
           Quick Links
         </h2>
@@ -267,7 +263,7 @@ const DashboardMe = () => {
             return (
               <Card
                 key={link.id}
-                className="p-4 hover:scale-105 transition-transform cursor-pointer bg-[#E0E0E0]"
+                className="p-4 hover:scale-105 transition-transform cursor-pointer bg-blue-100 shadow-sm rounded-lg border border-blue-200"
                 onClick={link.action}
               >
                 <div className="flex items-center justify-between">
@@ -276,11 +272,11 @@ const DashboardMe = () => {
                       <Icon className={`w-5 h-5 ${link.iconColor}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-sm">{link.title}</h3>
-                      <p className="text-xs text-muted-foreground">{link.subtitle}</p>
+                      <h3 className="font-semibold text-sm text-blue-700">{link.title}</h3>
+                      <p className="text-xs text-blue-500">{link.subtitle}</p>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                  <ExternalLink className="w-4 h-4 text-blue-400" />
                 </div>
               </Card>
             );
@@ -288,38 +284,38 @@ const DashboardMe = () => {
         </div>
       </div>
 
-      {/* App Download Promotion */}
-      <Card className="p-4 mb-6 border-green-500/30 bg-[#E0E0E0]">
+      {/* App Download Promotion - Light Blue Card */}
+      <Card className="p-4 mb-6 border-green-500/30 bg-blue-100 shadow-sm rounded-lg border border-blue-200">
         <div className="flex items-center space-x-3">
           <div className="p-2 rounded-lg bg-green-500/20">
             <Smartphone className="w-6 h-6 text-green-400" />
           </div>
           <div className="flex-1">
-            <h3 className="font-bold text-green-400 mb-1">Get Mobile App</h3>
-            <p className="text-xs text-muted-foreground">
+            <h3 className="font-bold text-green-500 mb-1">Get Mobile App</h3>
+            <p className="text-xs text-blue-500">
               Download our app for better experience and notifications
             </p>
           </div>
           <Button
             onClick={handleDownloadApp}
             size="sm"
-            className="btn-cyber"
+            className="btn-cyber bg-green-500 hover:bg-green-600 text-white"
           >
             Download
           </Button>
         </div>
       </Card>
 
-      {/* Admin Panel Button - Only for Admins */}
+      {/* Admin Panel Button - Light Blue Card */}
       {isAdmin && (
-        <Card className="p-4 mb-6 border-orange-500/30 bg-[#E0E0E0]">
+        <Card className="p-4 mb-6 border-orange-500/30 bg-blue-100 shadow-sm rounded-lg border border-blue-200">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-lg bg-orange-500/20">
               <Shield className="w-6 h-6 text-orange-400" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-orange-400 mb-1">Admin Panel</h3>
-              <p className="text-xs text-muted-foreground">
+              <h3 className="font-bold text-orange-500 mb-1">Admin Panel</h3>
+              <p className="text-xs text-blue-500">
                 Access admin dashboard and platform management
               </p>
             </div>
@@ -334,29 +330,29 @@ const DashboardMe = () => {
         </Card>
       )}
 
-      {/* Logout Button */}
+      {/* Logout Button - Red */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button
             variant="outline"
-            className="w-full h-12 border-red-500/50 hover:bg-red-500/10 hover:text-red-300 bg-red-600 text-black"
+            className="w-full h-12 bg-red-600 text-white hover:bg-red-700 hover:text-white"
           >
             <LogOut className="w-5 h-5 mr-2" />
             Logout
           </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent className="bg-[#E0E0E0]">
+        <AlertDialogContent className="bg-white rounded-lg shadow-md border border-gray-200">
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg font-semibold text-gray-800">Confirm Logout</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600">
               Are you sure you want to logout? You will need to sign in again to access your account.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="text-gray-500 hover:text-gray-700">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 text-white rounded-md px-4 py-2"
             >
               Yes, Logout
             </AlertDialogAction>
