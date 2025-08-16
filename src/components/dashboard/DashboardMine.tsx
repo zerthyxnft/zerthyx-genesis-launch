@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import {
@@ -13,7 +12,15 @@ import {
   Timer,
   Trophy,
   Sparkles,
-  Wallet
+  Wallet,
+  Fuel,
+  Rocket,
+  Users,
+  LayoutGrid,
+  Home,
+  CheckSquare,
+  User,
+  Power
 } from 'lucide-react';
 
 interface MiningWallet {
@@ -161,6 +168,13 @@ const DashboardMine = () => {
     }
   };
 
+  const handleComingSoon = () => {
+    toast({
+      title: "Coming Soon!",
+      description: "This feature is under development. Stay tuned!",
+    });
+  };
+
   const formatTime = (seconds: number) => {
     if (seconds < 0) seconds = 0;
     const hours = Math.floor(seconds / 3600);
@@ -173,8 +187,23 @@ const DashboardMine = () => {
   const formattedTotalPoints = (miningWallet?.total_points / 1000).toFixed(2) || '0.00';
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-white flex flex-col items-center p-6">
-      <div className="relative w-full max-w-sm flex-1 flex flex-col justify-center items-center">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] text-white flex flex-col items-center">
+      {/* Background circles animation */}
+      <div className="absolute inset-0 z-0 overflow-hidden opacity-30">
+        <div className="absolute w-60 h-60 bg-[#ff00e5] rounded-full blur-[100px] -top-20 -left-20 animate-pulse-slow"></div>
+        <div className="absolute w-80 h-80 bg-[#00e1ff] rounded-full blur-[120px] -bottom-40 -right-40 animate-pulse-slow-delay"></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-sm flex-1 flex flex-col items-center p-6">
+        {/* Header with Logo */}
+        <div className="w-full flex justify-between items-center mb-10">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ZTYX MINE</h1>
+          <div className="flex items-center space-x-2">
+            <span className="text-gray-400 font-medium">IVANNIKOV.PRO</span>
+            <img src="/path/to/your/logo.png" alt="ZTYX Logo" className="w-8 h-8 rounded-full" />
+          </div>
+        </div>
+
         {/* Main Circular Progress & Timer */}
         <div className="relative w-full aspect-square max-w-[300px] flex items-center justify-center">
           {/* Progress SVG */}
@@ -222,9 +251,8 @@ const DashboardMine = () => {
           </div>
         </div>
         
-        {/* Mining Info */}
+        {/* Mining Rate Info */}
         <div className="text-center mt-8">
-          <p className="text-lg text-gray-400">ZTYX.PRO</p>
           <p className="text-2xl font-bold text-white">0.01 ZTYX/hour</p>
         </div>
 
@@ -240,7 +268,7 @@ const DashboardMine = () => {
         >
           <div className="flex items-center justify-center space-x-3">
             {isClaiming ? (
-              <Loader className="w-6 h-6 animate-spin" />
+              <Timer className="w-6 h-6 animate-spin" />
             ) : (
               <Coins className="w-6 h-6 animate-bounce" />
             )}
@@ -253,20 +281,53 @@ const DashboardMine = () => {
         </Button>
       </div>
 
-      {/* Styles for animation - this can be moved to a CSS file */}
-      <style jsx>{`
+      {/* Bottom Navigation Bar */}
+      <div className="fixed bottom-0 w-full max-w-sm mx-auto bg-[#1a1a1a] border-t border-gray-700 grid grid-cols-4 items-center justify-around py-4">
+        <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+          <Fuel className="w-6 h-6" />
+          <span className="text-xs mt-1">Gas</span>
+        </Button>
+        <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+          <Rocket className="w-6 h-6" />
+          <span className="text-xs mt-1">Boost</span>
+        </Button>
+        <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+          <Users className="w-6 h-6" />
+          <span className="text-xs mt-1">Team</span>
+        </Button>
+        <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+          <LayoutGrid className="w-6 h-6" />
+          <span className="text-xs mt-1">Apps</span>
+        </Button>
+      </div>
+
+      {/* Global Styles */}
+      <style jsx global>{`
         @keyframes pulse-slow {
           0%, 100% {
             transform: scale(1);
-            opacity: 1;
+            opacity: 0.8;
           }
           50% {
             transform: scale(1.05);
+            opacity: 1;
+          }
+        }
+        @keyframes pulse-slow-delay {
+          0%, 100% {
+            transform: scale(1);
             opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.05);
+            opacity: 1;
           }
         }
         .animate-pulse-slow {
-          animation: pulse-slow 2s infinite;
+          animation: pulse-slow 5s infinite ease-in-out;
+        }
+        .animate-pulse-slow-delay {
+          animation: pulse-slow-delay 5s infinite ease-in-out 2s;
         }
       `}</style>
     </div>
