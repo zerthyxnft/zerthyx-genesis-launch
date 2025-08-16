@@ -182,7 +182,7 @@ const DashboardMine = () => {
       <div className="w-full max-w-sm flex-1 flex flex-col items-center">
         {/* Header with ZTYX MINE only */}
         <div className="w-full flex justify-center items-center mb-10">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent">ZTYX MINE</h1>
+          <h1 className="text-2xl font-normal bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent">ZTYX MINE</h1>
         </div>
 
         {/* Circular Progress Bar */}
@@ -216,16 +216,16 @@ const DashboardMine = () => {
             </defs>
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <p className="text-sm text-gray-400">In storage</p>
-            <p className="text-4xl font-bold text-white mb-2">
+            <p className="text-xs text-gray-400">In storage</p>
+            <p className="text-3xl font-normal text-white mb-2">
               {currentMiningPoints.toFixed(4)} ZTYX
             </p>
             <p className="text-sm text-gray-500">Balance</p>
-            <p className="text-2xl font-bold text-white mb-2">
+            <p className="text-xl font-normal text-white mb-2">
               {totalPointsDisplay.toFixed(2)} ZTYX
             </p>
-            <p className="text-sm text-gray-500">Fill</p>
-            <p className="text-xl font-bold text-white">
+            <p className="text-xs text-gray-500">Fill</p>
+            <p className="text-lg font-normal text-white">
               {formatTime(timeLeft)}
             </p>
           </div>
@@ -233,14 +233,14 @@ const DashboardMine = () => {
         
         {/* Mining Rate Info */}
         <div className="text-center mb-8">
-          <p className="text-xl font-bold text-white">0.01 ZTYX/hour</p>
+          <p className="text-xl font-normal text-white">0.01 ZTYX/hour</p>
         </div>
 
         {/* Claim Button */}
         <Button
           onClick={handleClaim}
           disabled={!canClaim || isClaiming}
-          className={`w-full h-16 text-lg font-bold rounded-xl shadow-lg transition-all duration-300 ${
+          className={`w-full h-16 text-lg font-normal rounded-xl shadow-lg transition-all duration-300 ${
             canClaim
               ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:scale-105 shadow-blue-500/50 text-white'
               : 'bg-gray-700 text-gray-500 cursor-not-allowed'
