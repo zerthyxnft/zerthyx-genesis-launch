@@ -178,7 +178,7 @@ const DashboardMine = () => {
   const progressPercentage = (oneHourInSeconds - timeLeft) / oneHourInSeconds * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#2c1f4e] to-[#121124] text-white flex flex-col items-center p-6 relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#ffff66] to-[#ff99ff] text-white flex flex-col items-center p-6 relative">
       <div className="w-full max-w-sm flex-1 flex flex-col items-center">
         {/* Header with ZTYX MINE only */}
         <div className="w-full flex justify-center items-center mb-10">
