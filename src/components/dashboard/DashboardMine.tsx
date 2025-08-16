@@ -54,7 +54,6 @@ const DashboardMine = () => {
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [canClaim, setCanClaim] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
-  const [animatingPoints, setAnimatingPoints] = useState(false);
   const { toast } = useToast();
 
   const oneHourInSeconds = 3600;
@@ -135,9 +134,6 @@ const DashboardMine = () => {
       const result = data as unknown as MiningClaimResult;
 
       if (result.success) {
-        setAnimatingPoints(true);
-        setTimeout(() => setAnimatingPoints(false), 2000);
-        
         toast({
           title: "Mining successful!",
           description: `You earned ${result.points_earned} points!`,
@@ -184,13 +180,9 @@ const DashboardMine = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#2c1f4e] to-[#121124] text-white flex flex-col items-center p-6 relative">
       <div className="w-full max-w-sm flex-1 flex flex-col items-center">
-        {/* Header with ZTYX MINE and User Info */}
-        <div className="w-full flex justify-between items-center mb-10">
+        {/* Header with ZTYX MINE only */}
+        <div className="w-full flex justify-center items-center mb-10">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent">ZTYX MINE</h1>
-          <div className="flex items-center space-x-2">
-            <span className="text-gray-400 font-medium">IVANNIKOV.PRO</span>
-            <img src="/path/to/your/icon.png" alt="ZTYX Logo" className="w-8 h-8 rounded-full" />
-          </div>
         </div>
 
         {/* Circular Progress Bar */}
@@ -224,15 +216,15 @@ const DashboardMine = () => {
             </defs>
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <p className="text-lg text-gray-400">In storage</p>
-            <p className="text-5xl font-bold text-white mb-4">
+            <p className="text-sm text-gray-400">In storage</p>
+            <p className="text-4xl font-bold text-white mb-2">
               {currentMiningPoints.toFixed(4)} ZTYX
             </p>
-            <p className="text-lg text-gray-500">Balance</p>
-            <p className="text-3xl font-bold text-white mb-4">
+            <p className="text-sm text-gray-500">Balance</p>
+            <p className="text-2xl font-bold text-white mb-2">
               {totalPointsDisplay.toFixed(2)} ZTYX
             </p>
-            <p className="text-lg text-gray-500">Fill</p>
+            <p className="text-sm text-gray-500">Fill</p>
             <p className="text-xl font-bold text-white">
               {formatTime(timeLeft)}
             </p>
@@ -268,24 +260,26 @@ const DashboardMine = () => {
           </div>
         </Button>
 
-        {/* Additional Buttons below Claim button */}
-        <div className="grid grid-cols-4 gap-3 w-full mt-6">
-          <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
-            <Fuel className="w-6 h-6" />
-            <span className="text-xs mt-1">Gas</span>
-          </Button>
-          <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
-            <Rocket className="w-6 h-6" />
-            <span className="text-xs mt-1">Boost</span>
-          </Button>
-          <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
-            <Users className="w-6 h-6" />
-            <span className="text-xs mt-1">Team</span>
-          </Button>
-          <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
-            <LayoutGrid className="w-6 h-6" />
-            <span className="text-xs mt-1">Apps</span>
-          </Button>
+        {/* Additional Buttons inside a div */}
+        <div className="w-full mt-6 p-4 rounded-xl bg-[#1e1e1e] border border-gray-700">
+          <div className="grid grid-cols-4 gap-3">
+            <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+              <Fuel className="w-6 h-6" />
+              <span className="text-xs mt-1">Gas</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+              <Rocket className="w-6 h-6" />
+              <span className="text-xs mt-1">Boost</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+              <Users className="w-6 h-6" />
+              <span className="text-xs mt-1">Team</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center text-gray-400 hover:text-white" onClick={handleComingSoon}>
+              <LayoutGrid className="w-6 h-6" />
+              <span className="text-xs mt-1">Apps</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
