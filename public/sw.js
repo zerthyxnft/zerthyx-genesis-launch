@@ -26,20 +26,25 @@ self.addEventListener('install', (event) => {
 
 // Fetch event (Network first, fallback to cache)
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Cache fetched file for future
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
-        });
-      })
-      .catch(() => {
-        // If offline, try cache
-        return caches.match(event.request);
-      })
-  );
+  // Only cache GET requests to avoid TypeError
+  if (event.request.method === 'GET') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            // Check if the response is valid before cloning and caching
+            if (response.status === 200) {
+              cache.put(event.request, response.clone());
+            }
+            return response;
+          });
+        })
+        .catch(() => {
+          // If offline, try cache
+          return caches.match(event.request);
+        })
+    );
+  }
 });
 
 // Activate event (Delete old caches)
