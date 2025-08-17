@@ -11,6 +11,7 @@ import {
     Users, 
     Copy, 
     Share2,
+    ExternalLink,
     CheckCircle,
     Clock,
     Star,
@@ -258,14 +259,14 @@ const DashboardTask = () => {
     }).length;
 
     return (
-        <div className="p-6 max-w-md mx-auto bg-blue-950 text-white min-h-screen">
+        <div className="p-6 max-w-md mx-auto bg-white text-gray-900 min-h-screen">
             {/* Header */}
             <div className="mb-6">
                 <div className="flex items-center space-x-2 mb-4">
                     <div className="p-2 rounded-lg bg-blue-700 border border-blue-600">
                         <Trophy className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-xl font-bold text-gray-200">
+                    <h1 className="text-xl font-bold text-gray-900">
                         Complete tasks and earn mining points
                     </h1>
                 </div>
@@ -282,13 +283,13 @@ const DashboardTask = () => {
                     </div>
                 </Card>
 
-                <Card className="p-4 mb-6 bg-blue-900 border-none rounded-lg">
+                <Card className="p-4 mb-6 bg-blue-100 border-none rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-gray-300">Today's tasks are completed</span>
-                        <span className="text-sm font-bold text-white">{completedTasksToday}/8</span>
+                        <span className="text-sm text-gray-600">Today's tasks are completed</span>
+                        <span className="text-sm font-bold text-gray-900">{completedTasksToday}/8</span>
                     </div>
-                    <Progress value={dailyProgress} className="h-2 mb-2 bg-blue-700 [&>div]:bg-gradient-to-r [&>div]:from-cyan-400 [&>div]:to-blue-400" />
-                    <div className="flex justify-between text-xs text-gray-400">
+                    <Progress value={dailyProgress} className="h-2 mb-2 bg-blue-300 [&>div]:bg-gradient-to-r [&>div]:from-cyan-400 [&>div]:to-blue-400" />
+                    <div className="flex justify-between text-xs text-gray-500">
                         <span>0</span>
                         <span>8 tasks</span>
                     </div>
@@ -300,14 +301,14 @@ const DashboardTask = () => {
                 const status = getTaskStatus(task);
                 const available = isTaskAvailableToday(task);
                 return (
-                    <Card key={task.id} className="p-4 mb-4 bg-blue-900 border-none rounded-lg">
+                    <Card key={task.id} className="p-4 mb-4 bg-blue-50 border-none rounded-lg">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                                <div className="p-2 rounded-lg bg-green-500">{getTaskIcon(task.icon)}</div>
+                                <div className="p-2 rounded-lg bg-green-200">{getTaskIcon(task.icon)}</div>
                                 <div>
-                                    <h3 className="font-bold text-green-400">{task.title}</h3>
-                                    <p className="text-xs text-gray-400">{task.description}</p>
-                                    <p className="text-sm font-bold text-green-400">+{task.reward_points} points</p>
+                                    <h3 className="font-bold text-green-700">{task.title}</h3>
+                                    <p className="text-xs text-gray-600">{task.description}</p>
+                                    <p className="text-sm font-bold text-green-700">+{task.reward_points} points</p>
                                 </div>
                             </div>
                             <Button 
@@ -325,7 +326,7 @@ const DashboardTask = () => {
 
             {/* Social Media Tasks */}
             <div className="mb-6">
-                <h2 className="text-lg font-bold mb-4 flex items-center text-gray-200">
+                <h2 className="text-lg font-bold mb-4 flex items-center text-gray-900">
                     <Star className="w-5 h-5 mr-2 text-yellow-400" />
                     Social Media Work
                 </h2>
@@ -334,7 +335,7 @@ const DashboardTask = () => {
                     {getTasksByCategory('social').map(task => {
                         const status = getTaskStatus(task);
                         return (
-                            <Card key={task.id} className="p-4 bg-blue-900 border-none rounded-lg">
+                            <Card key={task.id} className="p-4 bg-blue-50 border-none rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-3">
                                         <div className={`p-2 rounded-lg ${
@@ -346,9 +347,9 @@ const DashboardTask = () => {
                                             'bg-purple-500'
                                         }`}>{getTaskIcon(task.icon)}</div>
                                         <div>
-                                            <h3 className="font-semibold text-sm text-white">{task.title}</h3>
-                                            <p className="text-xs text-gray-400">{task.description}</p>
-                                            <p className="text-sm font-bold text-green-400">+{task.reward_points} points</p>
+                                            <h3 className="font-semibold text-sm text-gray-900">{task.title}</h3>
+                                            <p className="text-xs text-gray-600">{task.description}</p>
+                                            <p className="text-sm font-bold text-green-700">+{task.reward_points} points</p>
                                         </div>
                                     </div>
                                     <Button 
@@ -367,42 +368,42 @@ const DashboardTask = () => {
             </div>
 
             {/* Referral System */}
-            <Card className="p-6 mb-6 bg-blue-900 border-none rounded-lg">
+            <Card className="p-6 mb-6 bg-blue-50 border-none rounded-lg">
                 <div className="text-center mb-4">
-                    <div className="p-3 rounded-full bg-blue-700 inline-flex mb-3">
-                        <Users className="w-6 h-6 text-white" />
+                    <div className="p-3 rounded-full bg-blue-200 inline-flex mb-3">
+                        <Users className="w-6 h-6 text-gray-700" />
                     </div>
-                    <h2 className="text-lg font-bold text-white mb-2">Refer and Earn</h2>
-                    <p className="text-sm text-gray-300 mb-4">Earn $1 USDT per qualified referral</p>
+                    <h2 className="text-lg font-bold text-gray-900 mb-2">Refer and Earn</h2>
+                    <p className="text-sm text-gray-600 mb-4">Earn $1 USDT per qualified referral</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="text-center">
-                        <p className="text-2xl font-bold text-white">{referralStats.count}</p>
+                        <p className="text-2xl font-bold text-gray-900">{referralStats.count}</p>
                         <p className="text-xs text-gray-500">successful referral</p>
                     </div>
                     <div className="text-center">
-                        <p className="text-2xl font-bold text-green-400">${referralStats.earnings}</p>
+                        <p className="text-2xl font-bold text-green-700">${referralStats.earnings}</p>
                         <p className="text-xs text-gray-500">total earnings</p>
                     </div>
                 </div>
 
                 <div className="space-y-3">
-                    <div className="p-3 bg-blue-800 rounded-lg">
-                        <p className="text-xs text-gray-400 mb-1">Your referral code:</p>
-                        <p className="font-mono text-white text-sm">{referralCode}</p>
+                    <div className="p-3 bg-blue-200 rounded-lg">
+                        <p className="text-xs text-gray-600 mb-1">Your referral code:</p>
+                        <p className="font-mono text-gray-900 text-sm">{referralCode}</p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-2">
-                        <Button onClick={copyReferralLink} variant="outline" size="sm" className="bg-blue-700 text-white border-blue-600 hover:bg-blue-600">
+                        <Button onClick={copyReferralLink} variant="outline" size="sm" className="bg-blue-300 text-gray-800 border-blue-400 hover:bg-blue-400">
                             <Copy className="w-4 h-4 mr-2" /> Copy
                         </Button>
-                        <Button onClick={shareReferralLink} size="sm" className="bg-white text-blue-700 hover:bg-gray-100">
+                        <Button onClick={shareReferralLink} size="sm" className="bg-green-500 text-white hover:bg-green-600">
                             <Share2 className="w-4 h-4 mr-2" /> Share
                         </Button>
                     </div>
                     
-                    <div className="text-xs text-gray-400 bg-blue-800 p-3 rounded-lg">
+                    <div className="text-xs text-gray-600 bg-blue-100 p-3 rounded-lg">
                         <p><strong>Terms & Conditions:</strong></p>
                         <p>1: Share your referral link with friends</p>
                         <p>2: Invite friends to sign up and deposit crypto worth more than $50</p>
@@ -414,22 +415,22 @@ const DashboardTask = () => {
 
             {/* Achievement Stats */}
             <div className="grid grid-cols-3 gap-3">
-                <Card className="p-3 text-center bg-blue-900 border-none rounded-lg">
+                <Card className="p-3 text-center bg-blue-50 border-none rounded-lg">
                     <Target className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
-                    <p className="text-xs text-gray-400">Complete today</p>
+                    <p className="text-xs text-gray-600">Complete today</p>
                     <p className="text-sm font-bold text-yellow-400">{completedTasksToday}</p>
                 </Card>
                 
-                <Card className="p-3 text-center bg-blue-900 border-none rounded-lg">
-                    <TrendingUp className="w-5 h-5 text-green-400 mx-auto mb-1" />
-                    <p className="text-xs text-gray-400">Total marks</p>
-                    <p className="text-sm font-bold text-green-400">{totalTaskPoints.toLocaleString()}</p>
+                <Card className="p-3 text-center bg-blue-50 border-none rounded-lg">
+                    <TrendingUp className="w-5 h-5 text-green-700 mx-auto mb-1" />
+                    <p className="text-xs text-gray-600">Total marks</p>
+                    <p className="text-sm font-bold text-green-700">{totalTaskPoints.toLocaleString()}</p>
                 </Card>
                 
-                <Card className="p-3 text-center bg-blue-900 border-none rounded-lg">
-                    <Sparkles className="w-5 h-5 text-purple-400 mx-auto mb-1" />
-                    <p className="text-xs text-gray-400">Referral</p>
-                    <p className="text-sm font-bold text-purple-400">{referralStats.count}</p>
+                <Card className="p-3 text-center bg-blue-50 border-none rounded-lg">
+                    <Sparkles className="w-5 h-5 text-purple-600 mx-auto mb-1" />
+                    <p className="text-xs text-gray-600">Referral</p>
+                    <p className="text-sm font-bold text-purple-600">{referralStats.count}</p>
                 </Card>
             </div>
         </div>
