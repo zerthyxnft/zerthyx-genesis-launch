@@ -399,7 +399,7 @@ const DashboardHome = () => {
       </div>
 
       {/* ---------- Wallet (ORANGE) ---------- */}
-      <div className="w-full rounded-xl shadow-xl overflow-hidden p-6" style={{ backgroundColor: "#FFA500" }}>
+      <div className="w-full rounded-xl shadow-xl overflow-hidden p-6" style={{ backgroundColor: "#006eff" }}>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-lg bg-white/10">
@@ -525,7 +525,7 @@ const DashboardHome = () => {
       {(walletData.total_profit + realTimeEarnings) >= 5 && (
         <div className="w-full bg-gray-100 rounded-xl p-4">
           <Button 
-            className="w-full bg-[#FFA500] text-white font-semibold"
+            className="w-full bg-[#006eff] text-white font-semibold"
             onClick={() => setShowWithdrawModal(true)}
           >
             <DollarSign className="w-5 h-5 mr-2" />
@@ -623,7 +623,7 @@ const DashboardHome = () => {
                   />
                 </div>
                 <Button 
-                  className="w-full bg-[#FFA500] text-white"
+                  className="w-full bg-[#006eff] text-white"
                   onClick={handleDepositSubmit}
                   disabled={!depositAmount || !uploadedFile}
                 >
@@ -685,7 +685,7 @@ const DashboardHome = () => {
             </div>
 
             <Button 
-              className="w-full bg-[#FFA500] text-white"
+              className="w-full bg-[#006eff] text-white"
               onClick={handleWithdrawSubmit}
               disabled={!withdrawAddress || !withdrawAmount}
             >
