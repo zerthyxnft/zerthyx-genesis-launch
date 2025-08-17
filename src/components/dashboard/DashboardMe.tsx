@@ -164,15 +164,7 @@ const DashboardMe = () => {
       iconColor: "text-cyan-400",
       bgColor: "bg-cyan-500/20"
     },
-    {
-      id: 2,
-      title: "Download App",
-      subtitle: "Get our mobile app",
-      icon: Download,
-      action: handleDownloadApp,
-      iconColor: "text-green-400",
-      bgColor: "bg-green-500/20"
-    },
+    
     {
       id: 3,
       title: "About Us",
@@ -229,8 +221,7 @@ const DashboardMe = () => {
               <h2 className="text-xl font-bold mb-1">{userProfile?.name || 'User'}</h2>
               <p className="text-sm text-blue-200 mb-1">{userProfile?.email || 'No email'}</p>
               <div className="flex items-center space-x-1">
-                <Crown className="w-3 h-3 text-yellow-400" />
-                <span className="text-xs text-yellow-300 font-medium">Premium Member</span>
+                <span className="text-xs text-yellow-300 font-medium"></span>
               </div>
             </div>
           </div>
@@ -240,12 +231,12 @@ const DashboardMe = () => {
               <p className="text-xs text-blue-200">Status</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-yellow-300">2.5k</p>
-              <p className="text-xs text-blue-200">Points</p>
+              <p className="text-lg font-bold text-yellow-300">Premium</p>
+              <p className="text-xs text-blue-200">No</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-purple-300">15</p>
-              <p className="text-xs text-blue-200">Tasks</p>
+              <p className="text-lg font-bold text-purple-300">Genuine</p>
+              <p className="text-xs text-blue-200">member</p>
             </div>
           </div>
         </div>
