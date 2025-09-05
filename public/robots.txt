@@ -1,0 +1,22 @@
+# Allow Googlebot full access
+User-agent: Googlebot
+Allow: /
+
+# Allow Bingbot full access
+User-agent: Bingbot
+Allow: /
+
+# Allow Twitterbot for link previews
+User-agent: Twitterbot
+Allow: /
+
+# Allow Facebook for link previews
+User-agent: facebookexternalhit
+Allow: /
+
+# Allow all other bots full access
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://zerthyx.com/sitemap.xml
