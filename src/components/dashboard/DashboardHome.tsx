@@ -120,18 +120,30 @@ const DashboardHome = () => {
     }
   };
 
-  // Load NFT deposit summary
+  // Load NFT deposit summary - FIXED: Use nft_deposit table instead of deposits
   const loadNFTSummary = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase.rpc('get_nft_deposit_summary', {
-        user_id_param: user.id
-      });
+      // Use nft_deposit table instead of deposits
+      const { data, error } = await supabase
+        .from('nft_deposit')
+        .select('*')
+        .eq('user_id', user.id);
 
       if (!error && data) {
-        setNftSummary(data);
+        const totalDeposits = data.reduce((sum, deposit) => sum + (deposit.amount || 0), 0);
+        const maturedAmount = data.filter(d => d.status === 'completed').reduce((sum, deposit) => sum + (deposit.amount || 0), 0);
+        const pendingAmount = data.filter(d => d.status === 'pending').reduce((sum, deposit) => sum + (deposit.amount || 0), 0);
+        
+        setNftSummary({
+          total_deposits: totalDeposits,
+          matured_amount: maturedAmount,
+          pending_amount: pendingAmount,
+          next_maturity_date: data[0]?.maturity_date || null,
+          batches: data
+        });
       }
     } catch (error) {
       console.error('Error loading NFT summary:', error);
@@ -239,14 +251,14 @@ const DashboardHome = () => {
     }
   };
 
-  // User deposits load
+  // User deposits load - FIXED: Use nft_deposit table instead of deposits
   const loadUserDeposits = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const { data, error } = await supabase
-        .from('deposits')
+        .from('nft_deposit')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
@@ -276,15 +288,16 @@ const DashboardHome = () => {
         return;
       }
 
-      // Insert deposit with transaction hash
+      // FIXED: Insert into nft_deposit table instead of deposits
       const { error } = await supabase
-        .from('deposits')
+        .from('nft_deposit')
         .insert({
           user_id: user.id,
           amount: parseFloat(depositAmount),
           blockchain: selectedBlockchain,
           deposit_address: depositAddresses[selectedBlockchain],
-          transaction_screenshot: transactionHash
+          transaction_hash: transactionHash,
+          status: 'pending'
         });
 
       if (error) throw error;
@@ -745,7 +758,7 @@ const DashboardHome = () => {
                     <td className="py-1 text-gray-800">{d.blockchain}</td>
                     <td className="py-1">
                       <span className={`px-2 py-1 rounded text-xs ${
-                        d.status === 'approved' ? 'bg-green-100 text-green-800' :
+                        d.status === 'completed' ? 'bg-green-100 text-green-800' :
                         d.status === 'rejected' ? 'bg-red-100 text-red-800' :
                         'bg-yellow-100 text-yellow-800'
                       }`}>
