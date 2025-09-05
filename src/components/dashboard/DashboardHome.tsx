@@ -115,40 +115,55 @@ const DashboardHome = () => {
     loadNFTSummary();
   }, []);
 
-  // Real-time earnings counter with database sync
+  // Fixed: Real-time earnings counter with proper database sync
   useEffect(() => {
     if (walletData.is_active && walletData.total_deposit > 0) {
-      const interval = setInterval(async () => {
+      const interval = setInterval(() => {
         const dailyRate = 2.2;
         const secondlyIncrement = (walletData.total_deposit * dailyRate / 100) / (24 * 60 * 60);
         
-        setRealTimeEarnings(prev => {
-          const newEarnings = prev + secondlyIncrement;
-          
-          // Update database every 10 seconds to avoid too many requests
-          if (Math.floor(Date.now() / 1000) % 10 === 0) {
-            updateEarningsInDatabase(newEarnings);
-          }
-          
-          return newEarnings;
-        });
+        setRealTimeEarnings(prev => prev + secondlyIncrement);
+        
+        // Update database every 60 seconds instead of frequent updates
+        if (Math.floor(Date.now() / 1000) % 60 === 0) {
+          updateEarningsInDatabase();
+        }
       }, 1000);
 
       return () => clearInterval(interval);
     }
   }, [walletData]);
 
-  // Function to update earnings in database
-  const updateEarningsInDatabase = async (currentEarnings: number) => {
+  // Fixed: Proper function to update earnings in database
+  const updateEarningsInDatabase = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Get current wallet data first
+      const { data: currentWallet, error: fetchError } = await supabase
+        .from('user_wallets')
+        .select('daily_earnings, total_deposit, last_earnings_update')
+        .eq('user_id', user.id)
+        .single();
+
+      if (fetchError || !currentWallet) return;
+
+      // Calculate proper earnings based on time difference
+      const now = new Date();
+      const lastUpdate = new Date(currentWallet.last_earnings_update || now);
+      const timeDiffInSeconds = (now.getTime() - lastUpdate.getTime()) / 1000;
+      
+      const dailyRate = 2.2;
+      const secondlyIncrement = (currentWallet.total_deposit * dailyRate / 100) / (24 * 60 * 60);
+      const newEarnings = currentWallet.daily_earnings + (timeDiffInSeconds * secondlyIncrement);
+
+      // Update database with correct calculation
       const { error } = await supabase
         .from('user_wallets')
         .update({
-          daily_earnings: currentEarnings,
-          last_earnings_update: new Date().toISOString()
+          daily_earnings: newEarnings,
+          last_earnings_update: now.toISOString()
         })
         .eq('user_id', user.id);
 
@@ -302,7 +317,6 @@ const DashboardHome = () => {
     setShowPaymentDetails(true);
   };
 
-
   const handleDepositSubmit = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -325,7 +339,7 @@ const DashboardHome = () => {
           amount: parseFloat(depositAmount),
           blockchain: selectedBlockchain,
           deposit_address: depositAddresses[selectedBlockchain],
-          transaction_screenshot: transactionHash // Storing txid in this field
+          transaction_screenshot: transactionHash
         });
 
       if (error) throw error;
@@ -339,8 +353,8 @@ const DashboardHome = () => {
       setShowPaymentDetails(false);
       setDepositAmount('');
       setTransactionHash('');
-      loadUserDeposits(); // refresh deposits list
-      loadNFTSummary(); // refresh NFT summary
+      loadUserDeposits();
+      loadNFTSummary();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -350,7 +364,7 @@ const DashboardHome = () => {
     }
   };
 
-  // -------- Withdraw Logic with blockchain, address, amount --------
+  // Withdraw Logic
   const handleWithdrawSubmit = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -366,7 +380,6 @@ const DashboardHome = () => {
         return;
       }
       
-      // Change minimum to 10 USDT as requested
       if (isNaN(amount) || amount < 10) {
         toast({
           title: "Minimum Withdraw",
@@ -440,7 +453,7 @@ const DashboardHome = () => {
       setShowWithdrawModal(false);
       setWithdrawAmount('');
       setWithdrawAddress('');
-      loadUserWithdrawals(); // refresh withdrawals list
+      loadUserWithdrawals();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -480,7 +493,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* ---------- Wallet (ORANGE) ---------- */}
+      {/* Wallet Section */}
       <div className="w-full rounded-xl shadow-xl overflow-hidden p-6" style={{ backgroundColor: "#006eff" }}>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -521,7 +534,7 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        {/* Real-time NFT Daily Earnings (small pill inside wallet) */}
+        {/* Real-time NFT Daily Earnings */}
         <div className="mt-4 inline-block bg-white/10 rounded-lg p-3">
           <div className="flex items-center justify-between min-w-[220px]">
             <div>
@@ -536,7 +549,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* ---------- NFT IMAGE & TEXT (NO BOX, WHITE BACKGROUND) ---------- */}
+      {/* NFT Image & Text */}
       <div className="w-full bg-white flex flex-col items-center space-y-3">
         <img 
           src="/lovable-uploads/nft-card.png"
@@ -551,7 +564,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* ---------- NFT FEATURES (light gray box) ---------- */}
+      {/* NFT Features */}
       <div className="w-full bg-gray-100 rounded-xl p-4 text-xs">
         <div dangerouslySetInnerHTML={{
           __html: `
@@ -561,12 +574,12 @@ const DashboardHome = () => {
             <p style="color:#000">🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
             <p style="color:#000">🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
             <p style="color:#000">⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
-            <p style="color:#000">🔥 <strong>Limited Supply</strong> – Don’t miss your chance to hold this high-yield NFT.</p>
+            <p style="color:#000">🔥 <strong>Limited Supply</strong> – Don't miss your chance to hold this high-yield NFT.</p>
           `
         }}/>
       </div>
 
-      {/* ---------- 45 Day Countdown Timer (light) ---------- */}
+      {/* 45 Day Countdown Timer */}
       {nftSummary.next_maturity_date && (
         <div className="w-full bg-gray-100 rounded-xl p-4">
           <div className="flex items-center gap-3 mb-4">
@@ -574,7 +587,7 @@ const DashboardHome = () => {
               <Clock className="w-5 h-5 text-orange-400" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900">NFT Maturity Countdown</h3>
+              <h3 className="font-bold text-gray-900">NFT Maturity Countdown</p>
               <p className="text-xs text-gray-600">45 Days Investment Period</p>
             </div>
           </div>
@@ -603,7 +616,7 @@ const DashboardHome = () => {
         </div>
       )}
 
-      {/* ---------- Profit Withdrawal Button (light) ---------- */}
+      {/* Profit Withdrawal Button */}
       {(walletData.total_profit + realTimeEarnings) >= 10 && (
         <div className="w-full bg-gray-100 rounded-xl p-4">
           <Button 
@@ -616,7 +629,7 @@ const DashboardHome = () => {
         </div>
       )}
 
-      {/* ---------- Deposit Modal ---------- */}
+      {/* Deposit Modal */}
       <Dialog open={showDepositModal} onOpenChange={setShowDepositModal}>
         <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
@@ -704,14 +717,13 @@ const DashboardHome = () => {
         </DialogContent>
       </Dialog>
 
-      {/* ---------- Withdraw Modal (light) ---------- */}
+      {/* Withdraw Modal */}
       <Dialog open={showWithdrawModal} onOpenChange={setShowWithdrawModal}>
         <DialogContent className="bg-white rounded-xl p-4">
           <DialogHeader>
             <DialogTitle className="text-black">WITHDRAW USDT</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {/* Blockchain Select */}
             <div>
               <label className="text-sm font-medium text-black">Blockchain</label>
               <Select value={selectedBlockchain} onValueChange={setSelectedBlockchain}>
@@ -725,7 +737,6 @@ const DashboardHome = () => {
               </Select>
             </div>
 
-            {/* Withdraw Amount */}
             <div>
               <label className="text-sm font-medium text-black">Amount (10 - 5000 USDT)</label>
               <Input 
@@ -742,7 +753,6 @@ const DashboardHome = () => {
               </p>
             </div>
 
-            {/* Withdraw Address */}
             <div>
               <label className="text-sm font-medium text-black">Wallet Address</label>
               <Input 
@@ -764,11 +774,10 @@ const DashboardHome = () => {
         </DialogContent>
       </Dialog>
 
-      {/* ---------- Transaction History - Deposits and Withdrawals ---------- */}
+      {/* Transaction History */}
       <div className="w-full bg-gray-100 rounded-xl p-4">
         <h3 className="font-bold mb-4 text-gray-900">Transaction History</h3>
         
-        {/* Deposits Table */}
         <div className="mb-6">
           <h4 className="font-semibold mb-2 text-gray-800">NFT Deposits</h4>
           <div className="overflow-x-auto">
@@ -810,7 +819,6 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        {/* Withdrawals Table */}
         <div>
           <h4 className="font-semibold mb-2 text-gray-800">Profit Withdrawals</h4>
           <div className="overflow-x-auto">
