@@ -16,64 +16,9 @@ import {
   Copy
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import zerthyxLogo from "/lovable-uploads/f217c0ea-c71e-41f0-8c43-5386375820b6.png";
-
-interface WalletData {
-  total_deposit: number;
-  total_profit: number;
-  daily_earnings: number;
-  last_earnings_update: string;
-  nft_maturity_date: string | null;
-  is_active: boolean;
-  deposit_batch_count?: number;
-  first_deposit_date?: string | null;
-  latest_deposit_date?: string | null;
-}
-
-interface NFTDepositSummary {
-  total_deposits: number;
-  matured_amount: number;
-  pending_amount: number;
-  next_maturity_date: string | null;
-  batches: NFTBatch[];
-}
-
-interface NFTBatch {
-  batch_number: number;
-  amount: number;
-  deposit_date: string;
-  maturity_date: string;
-  is_matured: boolean;
-  is_withdrawn: boolean;
-}
-
-interface DepositAddresses {
-  TRC20?: string;
-  BEP20?: string;
-}
-
-interface WithdrawalData {
-  id: string;
-  user_id: string;
-  amount: number;
-  blockchain: string;
-  wallet_address: string;
-  status?: string;
-  created_at?: string;
-}
-
-interface DepositData {
-  id: string;
-  user_id: string;
-  amount: number;
-  blockchain: string;
-  deposit_address: string;
-  status?: string;
-  created_at?: string;
-}
 
 const DashboardHome = () => {
-  const [walletData, setWalletData] = useState<WalletData>({
+  const [walletData, setWalletData] = useState({
     total_deposit: 0,
     total_profit: 0,
     daily_earnings: 0,
@@ -89,13 +34,13 @@ const DashboardHome = () => {
   const [withdrawAddress, setWithdrawAddress] = useState('');
   const [selectedBlockchain, setSelectedBlockchain] = useState('TRC20');
   const [transactionHash, setTransactionHash] = useState('');
-  const [depositAddresses, setDepositAddresses] = useState<DepositAddresses>({});
+  const [depositAddresses, setDepositAddresses] = useState({});
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [realTimeEarnings, setRealTimeEarnings] = useState(0);
-  const [withdrawals, setWithdrawals] = useState<WithdrawalData[]>([]);
-  const [deposits, setDeposits] = useState<DepositData[]>([]);
-  const [nftSummary, setNftSummary] = useState<NFTDepositSummary>({
+  const [withdrawals, setWithdrawals] = useState([]);
+  const [deposits, setDeposits] = useState([]);
+  const [nftSummary, setNftSummary] = useState({
     total_deposits: 0,
     matured_amount: 0,
     pending_amount: 0,
@@ -124,7 +69,7 @@ const DashboardHome = () => {
         
         setRealTimeEarnings(prev => prev + secondlyIncrement);
         
-        // Update database every 60 seconds instead of frequent updates
+        // Update database every 60 seconds
         if (Math.floor(Date.now() / 1000) % 60 === 0) {
           updateEarningsInDatabase();
         }
@@ -186,7 +131,7 @@ const DashboardHome = () => {
       });
 
       if (!error && data) {
-        setNftSummary(data as unknown as NFTDepositSummary);
+        setNftSummary(data);
       }
     } catch (error) {
       console.error('Error loading NFT summary:', error);
@@ -198,7 +143,7 @@ const DashboardHome = () => {
     if (nftSummary.next_maturity_date) {
       const interval = setInterval(() => {
         const now = new Date();
-        const maturityDate = new Date(nftSummary.next_maturity_date!);
+        const maturityDate = new Date(nftSummary.next_maturity_date);
         const diff = maturityDate.getTime() - now.getTime();
 
         if (diff > 0) {
@@ -226,7 +171,7 @@ const DashboardHome = () => {
         .from('user_wallets')
         .select('*')
         .eq('user_id', user.id)
-        .maybeSingle();
+        .single();
 
       if (error) throw error;
 
@@ -262,8 +207,8 @@ const DashboardHome = () => {
 
       if (error) throw error;
 
-      const addresses: DepositAddresses = {};
-      data?.forEach((setting: any) => {
+      const addresses = {};
+      data?.forEach((setting) => {
         if (setting.setting_key === 'deposit_address_trc20') {
           addresses.TRC20 = setting.setting_value;
         } else if (setting.setting_key === 'deposit_address_bep20') {
@@ -312,7 +257,7 @@ const DashboardHome = () => {
     }
   };
 
-  const handlePresetAmount = (amount: number) => {
+  const handlePresetAmount = (amount) => {
     setDepositAmount(amount.toString());
     setShowPaymentDetails(true);
   };
@@ -355,10 +300,10 @@ const DashboardHome = () => {
       setTransactionHash('');
       loadUserDeposits();
       loadNFTSummary();
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: error?.message ?? 'Something went wrong',
+        description: error.message || 'Something went wrong',
         variant: "destructive"
       });
     }
@@ -454,16 +399,16 @@ const DashboardHome = () => {
       setWithdrawAmount('');
       setWithdrawAddress('');
       loadUserWithdrawals();
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: error?.message ?? 'Something went wrong',
+        description: error.message || 'Something went wrong',
         variant: "destructive"
       });
     }
   };
 
-  const copyToClipboard = (text?: string) => {
+  const copyToClipboard = (text) => {
     if (!text) return;
     navigator.clipboard.writeText(text);
     toast({
@@ -482,19 +427,19 @@ const DashboardHome = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img 
-            src={zerthyxLogo} 
+            src="/lovable-uploads/f217c0ea-c71e-41f0-8c43-5386375820b6.png" 
             alt="Zerthyx Logo" 
-            className="w-10 h-10 rounded-full cyber-glow"
+            className="w-10 h-10 rounded-full"
           />
           <div>
-            <h1 className="text-xl font-bold text-highlight">Zerthyx</h1>
-            <p className="text-sm text-muted-foreground">Welcome back!</p>
+            <h1 className="text-xl font-bold text-gray-900">Zerthyx</h1>
+            <p className="text-sm text-gray-600">Welcome back!</p>
           </div>
         </div>
       </div>
 
       {/* Wallet Section */}
-      <div className="w-full rounded-xl shadow-xl overflow-hidden p-6" style={{ backgroundColor: "#006eff" }}>
+      <div className="w-full rounded-xl overflow-hidden p-6 bg-blue-600">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-lg bg-white/10">
@@ -566,17 +511,13 @@ const DashboardHome = () => {
 
       {/* NFT Features */}
       <div className="w-full bg-gray-100 rounded-xl p-4 text-xs">
-        <div dangerouslySetInnerHTML={{
-          __html: `
-            <p style="color:#000"><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
-            <p style="color:#000">💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
-            <p style="color:#000">⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
-            <p style="color:#000">🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
-            <p style="color:#000">🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
-            <p style="color:#000">⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
-            <p style="color:#000">🔥 <strong>Limited Supply</strong> – Don't miss your chance to hold this high-yield NFT.</p>
-          `
-        }}/>
+        <p className="text-black"><strong>🚀 Zerthyx Power NFT – Daily Rewards, Real Profits!</strong></p>
+        <p className="text-black">💸 <strong>2.2% Daily Return</strong> – Lock your USDT for 45 days & earn daily profits automatically.</p>
+        <p className="text-black">⏳ <strong>45-Day Cycle</strong> – Simple, secure, and predictable earning model.</p>
+        <p className="text-black">🌟 <strong>Top Performing NFT</strong> – Highest ROI compared to any staking NFT so far.</p>
+        <p className="text-black">🔒 <strong>Safe & Transparent</strong> – Fully blockchain-backed & smart contract powered.</p>
+        <p className="text-black">⚡ <strong>Auto Rewards</strong> – No clicks needed. Profits come to you every 24 hours.</p>
+        <p className="text-black">🔥 <strong>Limited Supply</strong> – Don't miss your chance to hold this high-yield NFT.</p>
       </div>
 
       {/* 45 Day Countdown Timer */}
@@ -587,7 +528,7 @@ const DashboardHome = () => {
               <Clock className="w-5 h-5 text-orange-400" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900">NFT Maturity Countdown</p>
+              <h3 className="font-bold text-gray-900">NFT Maturity Countdown</h3>
               <p className="text-xs text-gray-600">45 Days Investment Period</p>
             </div>
           </div>
@@ -620,7 +561,7 @@ const DashboardHome = () => {
       {(walletData.total_profit + realTimeEarnings) >= 10 && (
         <div className="w-full bg-gray-100 rounded-xl p-4">
           <Button 
-            className="w-full bg-[#006eff] text-white font-semibold"
+            className="w-full bg-blue-600 text-white font-semibold"
             onClick={() => setShowWithdrawModal(true)}
           >
             <DollarSign className="w-5 h-5 mr-2" />
@@ -705,7 +646,7 @@ const DashboardHome = () => {
                   </p>
                 </div>
                 <Button 
-                  className="w-full bg-[#006eff] text-white"
+                  className="w-full bg-blue-600 text-white"
                   onClick={handleDepositSubmit}
                   disabled={!depositAmount || !transactionHash.trim()}
                 >
@@ -764,7 +705,7 @@ const DashboardHome = () => {
             </div>
 
             <Button 
-              className="w-full bg-[#006eff] text-white"
+              className="w-full bg-blue-600 text-white"
               onClick={handleWithdrawSubmit}
               disabled={!withdrawAddress || !withdrawAmount}
             >
