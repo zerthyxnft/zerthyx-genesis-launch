@@ -374,7 +374,7 @@ const DashboardTask = () => {
                         <Users className="w-6 h-6 text-gray-700" />
                     </div>
                     <h2 className="text-lg font-bold text-gray-900 mb-2">Refer and Earn</h2>
-                    <p className="text-sm text-gray-600 mb-4">Earn $1 USDT per qualified referral</p>
+                    <p className="text-sm text-gray-600 mb-4">Earn $3 USDT per qualified referral</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
@@ -407,7 +407,7 @@ const DashboardTask = () => {
                         <p><strong>How it works:</strong></p>
                         <p>1. Share your unique referral link with friends</p>
                         <p>2. When they sign up and make their first deposit (any amount)</p>
-                        <p>3. You automatically receive $1 USDT in your main wallet</p>
+                        <p>3. You automatically receive $3 USDT in your main wallet</p>
                         <p>4. Reward appears in your transaction history as "Refer Bonus"</p>
                         <p className="mt-2 font-semibold">No minimum deposit required for referral bonus!</p>
                     </div>
