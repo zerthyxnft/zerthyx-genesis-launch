@@ -65,36 +65,6 @@ export type Database = {
         }
         Relationships: []
       }
-      blockchain_networks: {
-        Row: {
-          created_at: string
-          deposit_address: string
-          id: string
-          is_enabled: boolean
-          name: string
-          network_type: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          deposit_address: string
-          id?: string
-          is_enabled?: boolean
-          name: string
-          network_type: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          deposit_address?: string
-          id?: string
-          is_enabled?: boolean
-          name?: string
-          network_type?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       deposits: {
         Row: {
           admin_notes: string | null
@@ -226,33 +196,6 @@ export type Database = {
         }
         Relationships: []
       }
-      mining_token_images: {
-        Row: {
-          created_at: string
-          id: string
-          image_url: string
-          is_active: boolean
-          updated_at: string
-          uploaded_by: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          image_url: string
-          is_active?: boolean
-          updated_at?: string
-          uploaded_by: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          image_url?: string
-          is_active?: boolean
-          updated_at?: string
-          uploaded_by?: string
-        }
-        Relationships: []
-      }
       mining_wallets: {
         Row: {
           created_at: string
@@ -335,33 +278,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      nft_images: {
-        Row: {
-          created_at: string
-          id: string
-          image_url: string
-          is_active: boolean
-          updated_at: string
-          uploaded_by: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          image_url: string
-          is_active?: boolean
-          updated_at?: string
-          uploaded_by: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          image_url?: string
-          is_active?: boolean
-          updated_at?: string
-          uploaded_by?: string
-        }
-        Relationships: []
       }
       profiles: {
         Row: {
