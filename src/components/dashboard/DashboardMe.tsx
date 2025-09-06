@@ -19,15 +19,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   User,
   MessageCircle,
-  Download,
   Info,
   LogOut,
   ExternalLink,
-  Smartphone,
   Settings,
-  Crown,
   Sparkles,
-  Shield
+  Shield,
+  FileText
 } from 'lucide-react';
 
 interface UserProfile {
@@ -40,6 +38,8 @@ const DashboardMe = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -124,25 +124,20 @@ const DashboardMe = () => {
     window.open(telegramUrl, '_blank');
   };
 
-  const handleDownloadApp = () => {
-    const userAgent = navigator.userAgent || navigator.vendor;
-    if (/android/i.test(userAgent)) {
-      window.open('https://play.google.com/store/apps/details?id=com.zerthyx.app', '_blank');
-    } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-      window.open('https://apps.apple.com/app/zerthyx/id123456789', '_blank');
-    } else {
-      toast({
-        title: "Download App",
-        description: "Visit our website to download the mobile app for your device.",
-      });
-    }
+  const showPrivacyPolicy = () => {
+    setShowPrivacyModal(true);
   };
 
   const showAboutUs = () => {
-    toast({
-      title: "About Zerthyx Genesis",
-      description: "A revolutionary crypto mining and task-based earning platform. Join the future of digital earnings!",
-    });
+    setShowAboutModal(true);
+  };
+
+  const closePrivacyModal = () => {
+    setShowPrivacyModal(false);
+  };
+
+  const closeAboutModal = () => {
+    setShowAboutModal(false);
   };
 
   const getUserInitials = (name: string) => {
@@ -164,7 +159,15 @@ const DashboardMe = () => {
       iconColor: "text-cyan-400",
       bgColor: "bg-cyan-500/20"
     },
-    
+    {
+      id: 2,
+      title: "Privacy Policy",
+      subtitle: "Read our privacy policy",
+      icon: FileText,
+      action: showPrivacyPolicy,
+      iconColor: "text-purple-400",
+      bgColor: "bg-purple-500/20"
+    },
     {
       id: 3,
       title: "About Us",
@@ -275,27 +278,125 @@ const DashboardMe = () => {
         </div>
       </div>
 
-      {/* App Download Promotion - Light Blue Card */}
-      <Card className="p-4 mb-6 border-green-500/30 bg-blue-100 shadow-sm rounded-lg border border-blue-200">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-lg bg-green-500/20">
-            <Smartphone className="w-6 h-6 text-green-400" />
+      {/* Privacy Policy Modal */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-blue-600">Privacy Policy</h2>
+              <button onClick={closePrivacyModal} className="text-gray-500 hover:text-gray-700">
+                &times;
+              </button>
+            </div>
+            <div className="p-4 text-sm text-gray-700">
+              <p><strong>Effective Date:</strong> [01/09/2025]</p>
+              <p>At Zerthyx.com (and the Zerthyx mobile app), we respect your privacy and are committed to protecting it. This Privacy Policy explains how we handle user information.</p>
+              
+              <h3 className="font-bold mt-4 mb-2">1. Information We Collect</h3>
+              <p>We do not collect, store, or share any personal data such as your name, phone number, email, or address without your consent.</p>
+              <p>The app only uses basic information required for:</p>
+              <ul className="list-disc pl-5 mb-2">
+                <li>User authentication (for login / signup).</li>
+                <li>Wallet transactions (deposits, withdrawals, and token mining).</li>
+              </ul>
+              
+              <h3 className="font-bold mt-4 mb-2">2. How We Use Data</h3>
+              <ul className="list-disc pl-5 mb-2">
+                <li>Data is used only for providing services such as mining, referrals, and task rewards.</li>
+                <li>We do not sell, rent, or share your data with any third party.</li>
+              </ul>
+              
+              <h3 className="font-bold mt-4 mb-2">3. Data Security</h3>
+              <ul className="list-disc pl-5 mb-2">
+                <li>Your account and wallet are protected using secure blockchain technology.</li>
+                <li>We do not store sensitive financial data on our servers.</li>
+              </ul>
+              
+              <h3 className="font-bold mt-4 mb-2">4. No Illegal Activity</h3>
+              <p>Our platform does not promote or allow any illegal activities. Zerthyx is built only for legal digital mining, NFT, token rewards, and community growth.</p>
+              
+              <h3 className="font-bold mt-4 mb-2">5. Children's Privacy</h3>
+              <p>Our services are not directed at children under the age of 13.</p>
+              
+              <h3 className="font-bold mt-4 mb-2">6. Third-Party Services</h3>
+              <p>Some features (like blockchain transactions) may use trusted third-party services. These providers follow their own strict privacy and security policies.</p>
+              
+              <h3 className="font-bold mt-4 mb-2">7. User Control</h3>
+              <ul className="list-disc pl-5 mb-2">
+                <li>You can stop using the app anytime.</li>
+                <li>No personal data is stored after you leave.</li>
+              </ul>
+              
+              <h3 className="font-bold mt-4 mb-2">8. Changes to This Policy</h3>
+              <p>We may update this Privacy Policy if needed. Any changes will be updated on zerthyx.com.</p>
+              
+              <h3 className="font-bold mt-4 mb-2">9. Contact Us</h3>
+              <p>If you have any questions about this Privacy Policy, you can reach us at:</p>
+              <p>📩 zerthyx.nft@gmail.com</p>
+            </div>
+            <div className="p-4 border-t border-gray-200 flex justify-end">
+              <Button onClick={closePrivacyModal} className="bg-blue-600 hover:bg-blue-700">
+                Close
+              </Button>
+            </div>
           </div>
-          <div className="flex-1">
-            <h3 className="font-bold text-green-500 mb-1">Get Mobile App</h3>
-            <p className="text-xs text-blue-500">
-              Download our app for better experience and notifications
-            </p>
-          </div>
-          <Button
-            onClick={handleDownloadApp}
-            size="sm"
-            className="btn-cyber bg-green-500 hover:bg-green-600 text-white"
-          >
-            Download
-          </Button>
         </div>
-      </Card>
+      )}
+
+      {/* About Us Modal */}
+      {showAboutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-blue-600">About Zerthyx</h2>
+              <button onClick={closeAboutModal} className="text-gray-500 hover:text-gray-700">
+                &times;
+              </button>
+            </div>
+            <div className="p-4 text-sm text-gray-700">
+              <h3 className="font-bold text-lg mb-3 text-center text-blue-700">About Us</h3>
+              <p className="mb-3">
+                Zerthyx.com is the next-generation platform where NFTs, token mining, refer & earn, and daily tasks come together to create endless earning opportunities.
+              </p>
+              <p className="mb-3">
+                Our native token, ZTYX, is built on blockchain to be fast, secure, and highly rewarding. With Zerthyx, every user can mine ZTYX, complete tasks, or invite friends to earn more — building a stronger community every day.
+              </p>
+              
+              <div className="mb-3">
+                <div className="flex items-start mb-2">
+                  <span className="text-blue-600 mr-2 font-bold">🔹</span>
+                  <span><strong>Zerthyx NFT</strong> – Exclusive NFTs that work as digital mining assets, generating daily returns.</span>
+                </div>
+                <div className="flex items-start mb-2">
+                  <span className="text-blue-600 mr-2 font-bold">🔹</span>
+                  <span><strong>ZTYX Mining</strong> – Mine tokens directly through our platform and grow your balance.</span>
+                </div>
+                <div className="flex items-start mb-2">
+                  <span className="text-blue-600 mr-2 font-bold">🔹</span>
+                  <span><strong>Refer & Earn</strong> – Share Zerthyx with your friends and earn lifetime rewards.</span>
+                </div>
+                <div className="flex items-start mb-2">
+                  <span className="text-blue-600 mr-2 font-bold">🔹</span>
+                  <span><strong>Tasks & Rewards</strong> – Complete simple tasks daily to boost your ZTYX earnings.</span>
+                </div>
+              </div>
+              
+              <p className="mb-3">
+                <span className="text-red-500 font-bold">🚀</span> Just like Bitcoin in its early days, ZTYX has the potential to grow massively and become a leading name in the crypto world. By joining now, you're not just earning — you're becoming part of a future digital revolution.
+              </p>
+              
+              <p className="text-center font-bold text-blue-700 mt-4">
+                Zerthyx.com – Mine. Earn. Grow.
+              </p>
+            </div>
+            <div className="p-4 border-t border-gray-200 flex justify-end">
+              <Button onClick={closeAboutModal} className="bg-blue-600 hover:bg-blue-700">
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Admin Panel Button - Light Blue Card */}
       {isAdmin && (
